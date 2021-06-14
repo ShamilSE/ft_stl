@@ -1,11 +1,11 @@
 NAME = containers
 SRC = main.cpp
-INC = List.hpp Link.hpp
+INC = List/Node.hpp List/List.hpp
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 all: $(NAME)
 
-$(NAME): $(SRC)
+$(NAME): $(SRC) $(INC)
 	clang++ $(CFLAGS) $(SRC) -o $(NAME)
 
 fclean:
