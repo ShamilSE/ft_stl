@@ -1,75 +1,64 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include "Node.hpp"
 #include <iostream>
+#include <memory>
 
-namespace ft
-{
-	template <typename T>
-	class	list {
-		private:
-			size_t		_size;
-			Node<T>*	_first;
-			Node<T>*	_last;
+namespace ft {
 
-		public:
-			// constructors
-			list() {
-				_size = 0;
-				_first = nullptr;
-				_last = nullptr;
-			}
-			list(const list & other);
-			list& operator=(const list & other);
-			~list() {};
+    template <typename T>
+    struct	Node {
+        T           _content;
+        Node<T>*	next;
+        Node<T>*	prev;
+    };
 
-			// members
-			void	push_back(T const & content) {
-				Node<T> *new_node = new Node<T>(content);
-				if (_last) {
-					new_node->prev = _last;
-					_last->next = new_node;
-					if (!_first) {
-						_first = _last;
-					}
-				}
-				_last = new_node;
-				new_node->next = nullptr;
-				_size++;
+    template <typename T>
+    class ListIterator {
+        private:
+            Node<T>* node;
 
-			}
+        public:
+            ListIterator(Node<T>* n): node(n) {}
 
-			// getters
-			size_t	size() const {return _size;}
-			T const & getLast() {return _last->getContent();}
-			T const & getFirst() {return _first->getContent();}
+            T& operator*() {return node->_content;}
+    };
 
-			// iterator
-			class iterator {
-				public:
-					Node<T>*	pointer;
-					
-					// T const & operator*() {
-					// 	Node<T>* p = it->pointer;
-					// 	T& a = p->getContent();
-					// 	return a;
-					// }
-					void	operator++() {
-						// pointer = 
-						// return *this;
-						std::cout << "hello world" << std::endl;
-					}
-			};
 
-			iterator* it;
-			iterator&	begin() {
-				it = new iterator;
-				it->pointer = _first;
-				return *it;
-			}
-			// iterator*	end() {return _last;}
-	};
+    template<typename T>
+    class list {
+        private:
+            Node<T>*    _first;
+            Node<T>*    _last;
+            size_t      _size;
+            bool        _empty;
+
+        public:
+            typedef Node<T> node;
+            typedef ListIterator<T> iterator;
+
+            void initList() {
+                _size = 0;
+                _empty = false;
+                _first = nullptr;
+                _last = nullptr;
+            }
+
+            iterator begin() {return ListIterator<T>(_first);}
+
+            void push_front(const T & val) {
+                Node<T>* newNode = new Node<T>();
+                newNode->_content = val;
+                if (_first)
+                    _first->prev = newNode;
+                else
+                    _first = newNode;
+            }
+
+            list() {
+                initList();
+            }
+    };
 }
 
 #endif

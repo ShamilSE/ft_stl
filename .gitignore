@@ -1,4 +1,6 @@
 .vscode
+.idea
 a.out
 en.*
 **/.DS_Store
+containers

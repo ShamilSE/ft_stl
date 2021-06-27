@@ -1,6 +1,6 @@
 NAME = containers
 SRC = main.cpp
-INC = List/Node.hpp List/List.hpp
+INC = list/list.hpp
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 all: $(NAME)

@@ -4,12 +4,10 @@
 #include <memory>
 
 int	main(void) {
-	ft::list<int> list;
+    ft::list<int> list;
+    list.push_front(5);
 
-	list.push_back(5);
-	list.push_back(10);
-	ft::list<int>::iterator it = list.begin();
-	// std::cout << *it << std::endl;
-	++it;
-	return 0;
+    ft::list<int>::iterator start = list.begin();
+    (void)start;
+    std::cout << *start << std::endl;
 }
