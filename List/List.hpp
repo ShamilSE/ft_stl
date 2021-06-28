@@ -9,6 +9,11 @@ namespace ft {
     template <typename T>
     struct	Node {
         Node(): next(nullptr), prev(nullptr) {}
+
+        ~Node() {
+            std::cout << "delete node" << std::endl;
+        }
+
         T           _content;
         Node<T>*	next;
         Node<T>*	prev;
@@ -16,13 +21,59 @@ namespace ft {
 
     template <typename T>
     class ListIterator {
-        private:
-            Node<T>* node;
-
         public:
-            ListIterator(Node<T>* n): node(n) {}
+            Node<T>* node;
+            explicit ListIterator(Node<T>* n): node(n) {}
 
             T& operator*() {return node->_content;}
+
+            ListIterator operator++() {
+                if (node->next)
+                    node = node->next;
+                return *this;
+            }
+
+            ListIterator operator++(int) {
+                if (node->next)
+                    node = node->next;
+                return *this;
+            }
+
+            ListIterator operator--() {
+                if (node->prev)
+                    node = node->prev;
+                return *this;
+            }
+
+            ListIterator operator--(int) {
+                if (node->prev)
+                    node = node->prev;
+                return *this;
+            }
+
+            bool operator==(const ListIterator<T> & iterator) {return iterator.node == node;}
+
+            bool operator!=(const ListIterator<T> & iterator) {return iterator.node != node;}
+
+            bool operator<(const ListIterator<T> & iterator) {return iterator.node < node;}
+
+            bool operator<=(const ListIterator<T> & iterator) {return iterator.node <= node;}
+
+            bool operator>(const ListIterator<T> & iterator) {return iterator.node > node;}
+
+            bool operator>=(const ListIterator<T> & iterator) {return iterator.node >= node;}
+
+            ListIterator<T> operator+(int n) {
+                for (int index = 0; index < n; index++)
+                    node = node->next;
+                return *this;
+            }
+
+            ListIterator<T> operator-(int n) {
+                for (int index = 0; index < n; index++)
+                    node = node->prev;
+                return *this;
+            }
     };
 
 
@@ -34,9 +85,6 @@ namespace ft {
             Node<T>*    _last;
             size_t      _size;
 
-        public:
-            typedef ListIterator<T> iterator;
-
             void initList() {
                 _emptyNode = new Node<T>;
                 _emptyNode->_content = _size;
@@ -47,7 +95,12 @@ namespace ft {
                 _last = nullptr;
             }
 
+        public:
+            typedef ListIterator<T> iterator;
+
+
             iterator begin() {return ListIterator<T>(_first);}
+            iterator end() {return ListIterator<T>(_last);}
 
             void push_front(const T & val) {
                 Node<T>* newNode = new Node<T>();
@@ -112,6 +165,46 @@ namespace ft {
                         _last = nullptr;
                     _size--;
                 }
+            }
+
+            iterator insert( iterator pos, const T& value ) {
+                Node<T>* newNode = new Node<T>;
+                newNode->_content = value;
+
+                list<T>::iterator prev = pos - 1;
+                list<T>::iterator next = pos + 1;
+
+                prev.node->next = newNode;
+                next.node->prev = newNode;
+
+                newNode->prev = prev.node;
+                newNode->next = next.node;
+
+                return --pos;
+            }
+
+            iterator erase(iterator pos) {
+                Node<T>* node = pos.node;
+
+                node->prev->next = node->next;
+                node->next->prev = node->prev;
+
+                delete node;
+                node = nullptr;
+                return ++pos;
+            }
+
+            iterator erase( iterator first, iterator last ) {
+                list<T>::iterator iterator;
+                while (first != last)
+                    iterator = erase(first++);
+                return iterator;
+            }
+
+            void clear() {
+                list<T>::iterator start = begin();
+                list<T>::iterator end = end();
+                erase(start, end);
             }
 
             list() {
