@@ -8,6 +8,7 @@ namespace ft {
 
     template <typename T>
     struct	Node {
+        Node(): next(nullptr), prev(nullptr) {}
         T           _content;
         Node<T>*	next;
         Node<T>*	prev;
@@ -21,15 +22,7 @@ namespace ft {
         public:
             ListIterator(Node<T>* n): node(n) {}
 
-            T& operator*() {
-                if (node)
-                    return node->_content;
-                else {
-                    Node<T>* newNode = new Node<T>;
-                    newNode->_content = 0;
-                    return newNode->_content;
-                }
-            }
+            T& operator*() {return node->_content;}
     };
 
 
@@ -42,12 +35,11 @@ namespace ft {
             size_t      _size;
 
         public:
-            typedef Node<T> node;
             typedef ListIterator<T> iterator;
 
             void initList() {
                 _emptyNode = new Node<T>;
-                _emptyNode->_content = 0;
+                _emptyNode->_content = _size;
                 _emptyNode->next = nullptr;
                 _emptyNode->prev = nullptr;
                 _size = 0;
@@ -68,6 +60,11 @@ namespace ft {
                 else {
                     _first = newNode;
                 }
+                if (_last && _size == 1) {
+                    _first->next = _last;
+                    _last->prev = _first;
+                }
+                _emptyNode->next = _first;
                 _size++;
             }
 
@@ -81,6 +78,38 @@ namespace ft {
                         _first = tmp;
                     else
                         _first = nullptr;
+                    _size--;
+                }
+            }
+
+            void push_back(const T& value) {
+                Node<T>* newNode =  new Node<T>;
+                newNode->_content = value;
+                if (_last) {
+                    _last->next = newNode;
+                    newNode->prev = _last;
+                    _last = newNode;
+                }
+                else {
+                    _last = newNode;
+                }
+                if (_first && _size == 1) {
+                    _last->prev = _first;
+                    _first->next = _last;
+                }
+                _size++;
+            }
+
+            void pop_back() {
+                if (_last) {
+                    Node<T>* tmp = nullptr;
+                    if (_last->prev)
+                        tmp = _last->prev;
+                    delete _last;
+                    if (tmp)
+                        _last = tmp;
+                    else
+                        _last = nullptr;
                     _size--;
                 }
             }
