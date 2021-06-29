@@ -5,24 +5,16 @@
 #include <iostream>
 
 
+void test() {
+    ft::list<SomeClass> list;
+    SomeClass some("asg" , 123), some2("asf", 23);
+
+
+    list.push_front(some);
+    list.push_front(some2);
+}
+
 int	main(void) {
-    ft::list<int> list;
-
-    list.push_front(5);
-    list.push_back(50);
-    list.push_front(0);
-    list.push_back(150);
-    list.push_back(500);
-    list.push_front(-200);
-    list.push_front(-250);
-    list.push_front(-300);
-
-    ft::list<int>::iterator start = list.begin();
-    ft::list<int>::iterator end = list.end();
-
-    while (start != end) {
-        std::cout << *start << std::endl;
-        start++;
-    }
-
+    test();
+//    while (1);
 }

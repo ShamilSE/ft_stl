@@ -11,7 +11,7 @@ namespace ft {
         Node(T* content): _content(*content), next(nullptr), prev(nullptr) {}
 
         ~Node() {
-            delete _content;
+            delete &_content;
             std::cout << "delete node" << std::endl;
         }
 
@@ -134,6 +134,8 @@ namespace ft {
                         _first = tmp;
                     else
                         _first = nullptr;
+                    if (_first)
+                        _first->prev = _emptyNode;
                     _size--;
                 }
             }
@@ -196,31 +198,36 @@ namespace ft {
                 Node<T>* node = pos.node;
                 iterator next_element = ++pos;
 
-                node->prev->next = node->next;
-                node->next->prev = node->prev;
+                Node<T>* prevNode = node->prev;
+                Node<T>* nextNode = node->next;
+
+                prevNode->next = nextNode;
+                nextNode->prev = prevNode;
 
                 delete node;
-                node = nullptr;
+                _size--;
                 return next_element;
             }
 
-            iterator erase( iterator first, iterator last ) {
-                list<T>::iterator iterator;
-                while (first != last)
-                    iterator = erase(first++);
-                return iterator;
+            iterator erase(iterator first, iterator last) {
+                while (first != last) {
+                    erase(first);
+                    first++;
+                }
+                return ListIterator<T>(_emptyNode);
             }
 
             void clear() {
                 list<T>::iterator start = begin();
-                list<T>::iterator end = end();
-                erase(start, end);
+                erase(start, end());
             }
 
             list() {
                 initList();
             }
             ~list() {
+                clear();
+                delete _emptyNode;
                 std::cout << "list destructor called" << std::endl;
             }
     };
