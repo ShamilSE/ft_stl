@@ -8,13 +8,14 @@ namespace ft {
 
     template <typename T>
     struct	Node {
-        Node(): next(nullptr), prev(nullptr) {}
+        Node(T* content): _content(*content), next(nullptr), prev(nullptr) {}
 
         ~Node() {
+            delete _content;
             std::cout << "delete node" << std::endl;
         }
 
-        T           _content;
+        T&    _content;
         Node<T>*	next;
         Node<T>*	prev;
     };
@@ -86,11 +87,8 @@ namespace ft {
             size_t      _size;
 
             void initList() {
-                _emptyNode = new Node<T>;
-                _emptyNode->_content = _size;
-                _emptyNode->next = nullptr;
-                _emptyNode->prev = nullptr;
                 _size = 0;
+                _emptyNode = new Node<T>(nullptr);
                 _first = nullptr;
                 _last = nullptr;
             }
@@ -98,26 +96,31 @@ namespace ft {
         public:
             typedef ListIterator<T> iterator;
 
-
+            size_t size() const {return _size;}
             iterator begin() {return ListIterator<T>(_first);}
-            iterator end() {return ListIterator<T>(_last);}
+            iterator end() {return ListIterator<T>(_emptyNode);}
 
             void push_front(const T & val) {
-                Node<T>* newNode = new Node<T>();
-                newNode->_content = val;
+                T* content = new T(val);
+                Node<T>* newNode = new Node<T>(content);
                 if (_first) {
+                    if (_size == 1 && !_last)
+                        _last = _first;
                     _first->prev = newNode;
                     newNode->next = _first;
                     _first = newNode;
                 }
-                else {
+                else
                     _first = newNode;
-                }
                 if (_last && _size == 1) {
                     _first->next = _last;
                     _last->prev = _first;
                 }
-                _emptyNode->next = _first;
+                _emptyNode->prev = _first;
+                _emptyNode->next = _last;
+                _first->prev = _emptyNode;
+                if (_last)
+                    _last->next = _emptyNode;
                 _size++;
             }
 
@@ -135,21 +138,27 @@ namespace ft {
                 }
             }
 
-            void push_back(const T& value) {
-                Node<T>* newNode =  new Node<T>;
-                newNode->_content = value;
+            void push_back(const T& val) {
+                T* content = new T(val);
+                Node<T>* newNode = new Node<T>(content);
                 if (_last) {
+                    if (_size == 1 && !_first)
+                        _first = _last;
                     _last->next = newNode;
-                    newNode->prev = _last;
+                    newNode->prev = newNode;
                     _last = newNode;
                 }
-                else {
+                else
                     _last = newNode;
-                }
                 if (_first && _size == 1) {
                     _last->prev = _first;
                     _first->next = _last;
                 }
+                _emptyNode->prev = _first;
+                _emptyNode->next = _last;
+                _last->next = _emptyNode;
+                if (_first)
+                    _first->prev = _emptyNode;
                 _size++;
             }
 
@@ -185,13 +194,14 @@ namespace ft {
 
             iterator erase(iterator pos) {
                 Node<T>* node = pos.node;
+                iterator next_element = ++pos;
 
                 node->prev->next = node->next;
                 node->next->prev = node->prev;
 
                 delete node;
                 node = nullptr;
-                return ++pos;
+                return next_element;
             }
 
             iterator erase( iterator first, iterator last ) {
@@ -209,6 +219,9 @@ namespace ft {
 
             list() {
                 initList();
+            }
+            ~list() {
+                std::cout << "list destructor called" << std::endl;
             }
     };
 }
