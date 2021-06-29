@@ -100,6 +100,9 @@ namespace ft {
             iterator begin() {return ListIterator<T>(_first);}
             iterator end() {return ListIterator<T>(_emptyNode);}
 
+            T& front() {return _first->_content;}
+            T& back() {return _last->_content;}
+
             void push_front(const T & val) {
                 T* content = new T(val);
                 Node<T>* newNode = new Node<T>(content);
