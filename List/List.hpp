@@ -174,13 +174,15 @@ namespace ft {
                         _last = tmp;
                     else
                         _last = nullptr;
+                    if (_last)
+                        _last->next = _emptyNode;
                     _size--;
                 }
             }
 
             iterator insert( iterator pos, const T& value ) {
-                Node<T>* newNode = new Node<T>;
-                newNode->_content = value;
+                T* content = new T(value);
+                Node<T>* newNode = new Node<T>(content);
 
                 list<T>::iterator prev = pos - 1;
                 list<T>::iterator next = pos + 1;
