@@ -75,8 +75,11 @@ namespace ft {
 				}
 			}
 
-			resize();
-			reserve();
+			void resize( size_type count, T value = T() ) {
+				while (count < _size)
+					pop_back();
+				//TODO: if count > _size case
+			}
 
 			void pop_back() {
 				if (_size)
