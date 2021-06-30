@@ -4,3 +4,5 @@ a.out
 en.*
 **/.DS_Store
 containers
+containers.dSYM/
+.run/
