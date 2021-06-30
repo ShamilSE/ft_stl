@@ -6,30 +6,40 @@
 
 namespace ft {
 
-    template<typename T, typename Allocator = std::allocator<T> >
-    class vector {
-    private:
-        T *_content;
+		template<typename T>
+		class vectorIterator {
+		public:
+			T &item;
+		};
 
-    public:
-        vector() {
-            std::cout << "vector constructed" << std::endl;
-        }
+	template<typename T, typename Allocator = std::allocator<T> >
+	class vector {
 
-        vector(const vector<T> &);
+		public:
+			typedef typename std::allocator<T>  allocator;
+			typedef vectorIterator<T>  iterator;
+			typedef typename std::allocator<T>::pointer   pointer;
 
-        vector &operator=(const vector<T> &);
+		private:
+			size_t		_size;
+			size_t		_capacity;
+			pointer		array;
+			Allocator	_allocator;
 
-        ~vector() {
-            std::cout << "vector destructed" << std::endl;
-        }
+		public:
+			vector() {
+				_array = _allocator.allocate(0);
+				std::cout << "vector constructed" << std::endl;
+			}
 
-        class vectorIterator {
-        public:
-            T &item;
-        };
-    };
+			vector(const vector<T> &);
 
+			vector &operator=(const vector<T> &);
+
+			~vector() {
+				std::cout << "vector destructed" << std::endl;
+			}
+		};
 }
 
 #endif

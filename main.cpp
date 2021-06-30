@@ -5,6 +5,6 @@
 #include <iostream>
 
 int main(void) {
-    ft::vector<int> vector;
-    return 0;
+	ft::vector<SomeClass> vector;
+	return 0;
 }

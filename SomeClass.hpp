@@ -5,33 +5,33 @@
 #include <iostream>
 
 class SomeClass {
-    private:
-        std::string name;
-        int         number;
+	private:
+		std::string name;
+		int		 number;
 
-    public:
-        SomeClass(): name(nullptr), number(0) {}
+	public:
+		SomeClass(): name(nullptr), number(0) {}
 
-        SomeClass(const std::string & name, int number) {
-            this->name = name;
-            this->number = number;
-        }
+		SomeClass(const std::string & name, int number) {
+			this->name = name;
+			this->number = number;
+		}
 
-        SomeClass(const SomeClass & other) {
-            *this = other;
-        }
+		SomeClass(const SomeClass & other) {
+			*this = other;
+		}
 
-        SomeClass& operator=(const SomeClass & other) {
-            name = other.name;
-            number = other.number;
-            return *this;
-        }
+		SomeClass& operator=(const SomeClass & other) {
+			name = other.name;
+			number = other.number;
+			return *this;
+		}
 
-        ~SomeClass() {
-            std::cout << "SomeClass destructor called" << std::endl;
-        }
+		~SomeClass() {
+			std::cout << "SomeClass destructor called" << std::endl;
+		}
 
-        std::string getName() const {return name;}
+		std::string getName() const {return name;}
 };
 
 #endif
