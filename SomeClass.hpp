@@ -18,6 +18,7 @@ class SomeClass {
 		}
 
 		SomeClass(const SomeClass & other) {
+			std::cout << "SomeClass copy constructor" << std::endl;
 			*this = other;
 		}
 
