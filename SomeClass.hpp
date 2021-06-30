@@ -23,6 +23,7 @@ class SomeClass {
 		}
 
 		SomeClass& operator=(const SomeClass & other) {
+			std::cout << "assignation overload someclass" << std::endl;
 			name = other.name;
 			number = other.number;
 			return *this;

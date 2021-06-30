@@ -36,7 +36,7 @@ namespace ft {
 			vector &operator=(const vector<T> &) {}
 
 			~vector() {
-//				clear();
+				clear();
 			}
 
 			size_t size() const {return _size;}
@@ -55,7 +55,7 @@ namespace ft {
 					size_t index = 0;
 					if (_size) {
 						while (index < _size) {
-							new_array[index] = _array[index];
+							new_array[index] = _array[index]; // _allocator.construct
 							index++;
 						}
 					}
@@ -75,12 +75,20 @@ namespace ft {
 				}
 			}
 
-//			void clear() {
-//				for (size_t index = 0; index < _size; index++)
-//					_allocator.destroy(_array + index);
-//				_allocator.deallocate(_array, _capacity);
-//				_size = 0;
-//			}
+			resize();
+			reserve();
+
+			void pop_back() {
+				if (_size)
+					_allocator.destroy(_array + --_size);
+			}
+
+			void clear() {
+				for (size_t index = 0; index < _size; index++)
+					pop_back();
+				_allocator.deallocate(_array, _capacity);
+				_size = 0;
+			}
 
 		};
 }
