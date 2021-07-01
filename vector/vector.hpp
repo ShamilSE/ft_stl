@@ -7,14 +7,21 @@ namespace ft {
 
 	template<typename T>
 	class vectorIterator {
+		private:
+			T*	_ptr;
+
 		public:
-			T &item;
+			vectorIterator(T* _array): _ptr(_array) {}
+
+			T& operator*() {return *_ptr;}
 	};
 
 	template<typename T, typename Allocator = std::allocator<T> >
 	class vector {
 
+
 		public:
+			typedef vectorIterator<T>							iterator;
 			typedef Allocator allocator_type;
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::reference			reference;
@@ -75,11 +82,14 @@ namespace ft {
 				}
 			}
 
-			void resize( size_type count, T value = T() ) {
-				while (count < _size)
-					pop_back();
-				//TODO: if count > _size case
-			}
+			iterator begin() {return vectorIterator<T>(_array);}
+			iterator end() {return vectorIterator<T>(_array + _size);} // TODO: end iterator should point to next to last el
+
+//			void resize( size_t count, T value = T() ) {
+//				while (count < _size)
+//					pop_back();
+//				//TODO: if count > _size case
+//			}
 
 			void pop_back() {
 				if (_size)

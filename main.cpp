@@ -55,6 +55,32 @@ void simple_types_test_my() {
 //	vector.pop_back();
 }
 
+void iterator_test_my() {
+	std::cout << "============= MY ITERATOR TEST =============" << std::endl;
+	ft::vector<int> vector;
+
+	vector.push_back(122);
+	vector.push_back(237);
+	ft::vector<int>::iterator start = vector.begin();
+	ft::vector<int>::iterator end = vector.end();
+
+	std::cout << *start << std::endl;
+	std::cout << *end << std::endl;
+}
+
+void iterator_test_origin() {
+	std::cout << "============= ORIGIN ITERATOR TEST =============" << std::endl;
+	std::vector<int> vector;
+
+	vector.push_back(122);
+	vector.push_back(237);
+	std::vector<int>::iterator start = vector.begin();
+	std::vector<int>::iterator end = vector.end();
+
+	std::cout << *start << std::endl;
+	std::cout << *end << std::endl;
+}
+
 int main(void) {
 //	std::cout << "======================" << std::endl;
 //	std::cout << "my output" << std::endl;
@@ -69,7 +95,10 @@ int main(void) {
 
 //	index_operator_check_my();
 
-	simple_types_test_my();
-	while(1);
+//	simple_types_test_my();
+
+	iterator_test_my();
+	iterator_test_origin();
+//	while(1);
 	return 0;
 }
