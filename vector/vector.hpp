@@ -3,6 +3,7 @@
 #include <memory>
 #include <iostream>
 #include <exception>
+#include <string>
 
 namespace ft {
 
@@ -82,17 +83,29 @@ namespace ft {
 			iterator begin() {return vectorIterator<T>(_array);}
 			iterator end() {return vectorIterator<T>(_array + _size);} // TODO: end iterator should point to next to last el
 
+			size_type getDistance(iterator start, iterator end) {
+				size_type counter = 0;
+
+				while (start != end) {
+					++start;
+					counter++;
+				}
+				return counter;
+			}
+
 			iterator insert(iterator pos, const T& value) {
-				(void)pos;
-				(void)value;
-				// if (_size + 1 > _capacity)
-				// 	reserve((_size + 1) * 1.3);
-				
+				size_type distance = getDistance(begin(), pos);
+				if (_capacity < _size + 5)
+					reserve(_capacity + 10);
+				if (_size)
+					std::memmove((pos + 1).getPointer(), pos.getPointer(), _size);
+				_allocator.construct((begin() + distance).getPointer(), value);
+				_size++;
 				return begin();
 			}
 
 			void push_back(const T& value) {
-				insert(begin() + _size, value);
+				insert(end(), value);
 			}
 
 			void resize( size_t count, T value = T() ) {
@@ -103,6 +116,7 @@ namespace ft {
 			}
 
 			void reserve(size_type new_cap) {
+				std::cout << "reserved " << new_cap << std::endl;
 				if (new_cap > max_size())
 					throw tooMuchMemoryRequested();
 				if (new_cap > _capacity) {
@@ -120,6 +134,16 @@ namespace ft {
 			void pop_back() {
 				if (_size)
 					_allocator.destroy(_array + --_size);
+			}
+
+			void printAll() {
+				iterator start = begin();
+				iterator finish = end();
+
+				while (start != finish) {
+					std::cout << *start << std::endl;
+					++start;
+				}
 			}
 
 			void clear() {
