@@ -8,6 +8,33 @@
 namespace ft {
 
 	template<typename T>
+	class reverseVectorIterator {
+		private:
+			T* _ptr;
+
+		public:
+			typedef reverseVectorIterator<T>	r_iterator;
+
+			reverseVectorIterator() {}
+			reverseVectorIterator(T* _array): _ptr(_array) {}
+
+			T& operator*() {return *_ptr;}
+			r_iterator operator++() {_ptr -= 1; return *this;}
+			r_iterator operator++(int) {_ptr -= 1; return *this;}
+			r_iterator operator--() {_ptr += 1; return *this;}
+			r_iterator operator--(int) {_ptr += 1; return *this;}
+			r_iterator operator+(int n) {_ptr -= n; return *this;}
+			r_iterator operator-(int n) {_ptr += n; return *this;}
+
+			bool operator>(const reverseVectorIterator& other) {return _ptr > other._ptr;}
+			bool operator>=(const reverseVectorIterator& other) {return _ptr >= other._ptr;}
+			bool operator<(const reverseVectorIterator& other) {return _ptr < other._ptr;}
+			bool operator<=(const reverseVectorIterator& other) {return _ptr <= other._ptr;}
+			bool operator==(const reverseVectorIterator& other) {return _ptr == other._ptr;}
+			bool operator!=(const reverseVectorIterator& other) {return _ptr != other._ptr;}
+	};
+
+	template<typename T>
 	class vectorIterator {
 		private:
 			T*	_ptr;
@@ -17,13 +44,15 @@ namespace ft {
 
 			vectorIterator(T* _array): _ptr(_array) {}
 
+			vectorIterator() {}
 			T& operator*() {return *_ptr;}
-			// iterator& opeartor++(int) {_ptr += 1; return *this;}
+			iterator operator++(int) {_ptr += 1; return *this;}
 			iterator operator++() {_ptr += 1; return *this;}
+			iterator operator--() {_ptr -= 1; return *this;}
+			iterator operator--(int) {_ptr -= 1; return *this;}
 			iterator operator+(int n) {_ptr += n; return *this;}
 			iterator operator-(int n) {_ptr -= n; return *this;}
-			// void opeartor--() {_ptr -= _size;}
-			// void operator--(int) {_ptr -= _size;}
+
 			bool operator>(const vectorIterator& other) {return _ptr > other._ptr;}
 			bool operator>=(const vectorIterator& other) {return _ptr >= other._ptr;}
 			bool operator<(const vectorIterator& other) {return _ptr < other._ptr;}
@@ -39,16 +68,22 @@ namespace ft {
 
 
 		public:
-			typedef vectorIterator<T>							iterator;
-			typedef Allocator allocator_type;
+			typedef T											value_type;
+			typedef const value_type							const_value_type;
+			typedef vectorIterator<value_type>					iterator;
+			typedef vectorIterator<const_value_type>			const_iterator;
+			typedef reverseVectorIterator<value_type>			reverse_iterator;
+			typedef reverseVectorIterator<const_value_type>		const_reverse_iterator;
+			typedef Allocator									allocator_type;
 			typedef typename allocator_type::pointer			pointer;
-			typedef typename allocator_type::reference			reference;
-			typedef typename allocator_type::const_reference	const_reference;
-			typedef size_t size_type;
+			typedef typename allocator_type::const_pointer		const_pointer;
+			typedef size_t										size_type;
+			typedef value_type&									reference;
+			typedef const value_type&							const_reference;
 
 		private:
-			size_t		_size;
-			size_t		_capacity;
+			size_type	_size;
+			size_type	_capacity;
 			pointer		_array;
 			allocator_type	_allocator;
 
@@ -57,12 +92,19 @@ namespace ft {
 				_array = _allocator.allocate(0);
 			}
 
-			vector(const vector<T> & other) {*this = other;}
+			vector(const vector<T> & other) {
+				if ((*this) != other)
+					*this = other;
+			}
 
-			vector &operator=(const vector<T> &) {}
+			vector &operator=(const vector<T> & other) {
+				_array = other._array;
+				return *this;
+			}
 
 			~vector() {
 				clear();
+				_allocator.deallocate(_array, _capacity);
 			}
 
 			class tooMuchMemoryRequested : public std::exception {
@@ -71,17 +113,29 @@ namespace ft {
 				}
 			};
 
-			size_t size() const {return _size;}
+			class indexOutOfRangeException : public std::exception {
+				const char* what() const throw() {
+					return "index out of range";
+				}
+			};
+
+			size_type size() const {return _size;}
 			bool empty() const {return _size == 0;}
-			size_t max_size() const {return allocator_type().max_size();}
+			size_type max_size() const {return allocator_type().max_size();}
+			size_type capacity() const {return _capacity;}
 
 			allocator_type get_allocator() const {return _allocator;}
 
-			reference operator[](size_t pos) {return _array[pos];}
-			const_reference operator[]( size_t pos ) const {return _array[pos];}
 
-			iterator begin() {return vectorIterator<T>(_array);}
-			iterator end() {return vectorIterator<T>(_array + _size);} // TODO: end iterator should point to next to last el
+			iterator begin() {return iterator(_array);}
+			const_iterator cbegin() const {return const_iterator(_array);}
+			iterator end() {return iterator(_array + _size);}
+			const_iterator cend() const {return const_iterator(_array + _size);}
+			reverse_iterator rbegin() {return reverse_iterator(_array + _size - 1);}
+			reverse_iterator rend() {return reverse_iterator(_array - 1);}
+			const_reverse_iterator crbegin() const {return const_reverse_iterator(_array + _size -1);}
+			const_reverse_iterator crend() const {return const_reverse_iterator(_array -1);}
+
 
 			size_type getDistance(iterator start, iterator end) {
 				size_type counter = 0;
@@ -93,12 +147,14 @@ namespace ft {
 				return counter;
 			}
 
-			iterator insert(iterator pos, const T& value) {
+			iterator insert(iterator pos, const T& value) { // TODO: case whith begin() as pos
 				size_type distance = getDistance(begin(), pos);
 				if (_capacity < _size + 5)
-					reserve(_capacity + 10);
-				if (_size)
-					std::memmove((pos + 1).getPointer(), pos.getPointer(), _size);
+					reserve((_size + 5) * 1.25);
+				if (_size) {
+					iterator newPos = begin() + distance;
+					std::memmove(newPos.getPointer() + 1, newPos.getPointer(), sizeof(value_type) * (end().getPointer() - pos.getPointer()));
+				}
 				_allocator.construct((begin() + distance).getPointer(), value);
 				_size++;
 				return begin();
@@ -116,7 +172,6 @@ namespace ft {
 			}
 
 			void reserve(size_type new_cap) {
-				std::cout << "reserved " << new_cap << std::endl;
 				if (new_cap > max_size())
 					throw tooMuchMemoryRequested();
 				if (new_cap > _capacity) {
@@ -151,5 +206,50 @@ namespace ft {
 					pop_back();
 			}
 
+			reference at(size_type pos) {
+				if (pos >= 0 && pos < _size)
+					return _array[pos];
+				throw indexOutOfRangeException();
+			}
+
+			const_reference at( size_type pos ) const {
+				if (pos >= 0 && pos < _size)
+					return _array[pos];
+				throw indexOutOfRangeException();
+			}
+
+			reference operator[](size_type pos) {return _array[pos];}
+			const_reference operator[](size_type pos) const {return _array[pos];}
+
+			reference front() {return *(begin());}
+			const_reference front() const {return *(begin());}
+
+			reference back() {return (end() - 1);}
+			const_reference back() const {return (end() -1);}
+
+			iterator erase( iterator pos ) {
+				size_type distance = getDistance(pos, end());
+				_allocator.destroy(pos.getPointer());
+				_size--;
+				std::memmove(pos.getPointer(), pos.getPointer() + 1, sizeof(value_type) * distance);
+				return pos;
+			}
+
+			iterator erase( iterator first, iterator last ) {
+				size_type distance = getDistance(first, last);
+				iterator it = first;
+				while (distance--) {
+					it = erase(it);
+				}
+				return it;
+			}
+		
+			// void swap( vector& other ) {
+			// 	if (this->capacity() < other.size())
+			// 		this->resize(other.size() * 1.3);
+			// 	if (other.capacity() < this->size())
+			// 		other.resize(this->size() * 1.3);
+				
+			// }
 		};
 }
