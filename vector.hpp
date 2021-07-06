@@ -125,7 +125,7 @@ namespace ft {
 			size_type capacity() const {return _capacity;}
 
 			allocator_type get_allocator() const {return _allocator;}
-
+			const T*	getPointer() const {return _array;}
 
 			iterator begin() {return iterator(_array);}
 			const_iterator cbegin() const {return const_iterator(_array);}
@@ -147,7 +147,7 @@ namespace ft {
 				return counter;
 			}
 
-			iterator insert(iterator pos, const T& value) { // TODO: case whith begin() as pos
+			iterator insert(iterator pos, const T& value) {
 				size_type distance = getDistance(begin(), pos);
 				if (_capacity < _size + 5)
 					reserve((_size + 5) * 1.25);
@@ -238,18 +238,53 @@ namespace ft {
 			iterator erase( iterator first, iterator last ) {
 				size_type distance = getDistance(first, last);
 				iterator it = first;
-				while (distance--) {
+				while (distance--)
 					it = erase(it);
-				}
 				return it;
 			}
 		
-			// void swap( vector& other ) {
-			// 	if (this->capacity() < other.size())
-			// 		this->resize(other.size() * 1.3);
-			// 	if (other.capacity() < this->size())
-			// 		other.resize(this->size() * 1.3);
+			void swap( vector& other ) {
+				if (this->capacity() < other.size())
+					this->resize(other.size() * 1.3);
+				if (other.capacity() < this->size())
+					other.resize(this->size() * 1.3);
 				
-			// }
+				pointer tmp = _allocator.allocate(other.size());
+				
+				size_type index;
+				for (index = 0; this->_size > index; index++)
+					tmp[index] = other._array[index];
+
+				for (size_type i = 0; i < this->_size; i++)
+					other._array[i] = this->_array[i];
+
+				for (size_type i = 0; i < index; i++)
+					this->_array[i] = tmp[i];
+				_allocator.deallocate(tmp, index);
+			}
 		};
+
+		template< class T, class Alloc >
+		bool operator==( const ft::vector<T,Alloc>& lhs,
+			const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() == rhs.getPointer();}
+
+		template< class T, class Alloc >
+		bool operator!=( const ft::vector<T,Alloc>& lhs,
+                 const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() != rhs.getPointer();}
+
+		template< class T, class Alloc >
+		bool operator<( const ft::vector<T,Alloc>& lhs,
+                const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() < rhs.getPointer();}
+
+		template< class T, class Alloc >
+		bool operator<=( const ft::vector<T,Alloc>& lhs,
+                 const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() <= rhs.getPointer();}
+
+		template< class T, class Alloc >
+		bool operator>( const ft::vector<T,Alloc>& lhs,
+                const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() > rhs.getPointer();}
+
+		template< class T, class Alloc >
+		bool operator>=( const ft::vector<T,Alloc>& lhs,
+                 const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() >= rhs.getPointer();}
 }

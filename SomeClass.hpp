@@ -6,34 +6,40 @@
 
 class SomeClass {
 	private:
-		std::string name;
-		int		 number;
+		std::string _name;
+		int		 	_age;
 
 	public:
-		SomeClass(): name(nullptr), number(0) {}
+		SomeClass(): _name(nullptr), _age(0) {}
 
-		SomeClass(const std::string & name, int number) {
-			this->name = name;
-			this->number = number;
-		}
+		SomeClass(const std::string & name, int number)
+		:
+			_name(name), _age(number)
+		{}
 
 		SomeClass(const SomeClass & other) {
-			std::cout << "SomeClass copy constructor" << std::endl;
+			// std::cout << "SomeClass copy constructor" << std::endl;
 			*this = other;
 		}
 
 		SomeClass& operator=(const SomeClass & other) {
-			std::cout << "assignation overload someclass" << std::endl;
-			name = other.name;
-			number = other.number;
+			// std::cout << "assignation overload someclass" << std::endl;
+			_name = other._name;
+			_age = other._age;
 			return *this;
 		}
 
 		~SomeClass() {
-			std::cout << "SomeClass destructor called" << std::endl;
+			// std::cout << "SomeClass destructor called" << std::endl;
 		}
 
-		std::string getName() const {return name;}
+		std::string getName() const {return _name;}
+		int getAge() const {return _age;}
 };
+
+std::ostream& operator<<(std::ostream& os, const SomeClass& some) {
+	os << "name: " << some.getName() << "\n" << "age: " << some.getAge();
+	return os;
+}
 
 #endif
