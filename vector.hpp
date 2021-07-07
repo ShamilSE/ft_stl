@@ -125,7 +125,8 @@ namespace ft {
 			size_type capacity() const {return _capacity;}
 
 			allocator_type get_allocator() const {return _allocator;}
-			const T*	getPointer() const {return _array;}
+			T*	data() {return _array;}
+
 
 			iterator begin() {return iterator(_array);}
 			const_iterator cbegin() const {return const_iterator(_array);}
@@ -149,15 +150,25 @@ namespace ft {
 
 			iterator insert(iterator pos, const T& value) {
 				size_type distance = getDistance(begin(), pos);
-				if (_capacity < _size + 5)
-					reserve((_size + 5) * 1.25);
+				if (_capacity < _size + 1)
+					reserve((_size + 1) * 1.25);
 				if (_size) {
 					iterator newPos = begin() + distance;
-					std::memmove(newPos.getPointer() + 1, newPos.getPointer(), sizeof(value_type) * (end().getPointer() - pos.getPointer()));
+					std::memmove(
+						newPos.getPointer() + 1,
+						newPos.getPointer(),
+						sizeof(value_type) * (end().getPointer() - newPos.getPointer())
+					);
 				}
 				_allocator.construct((begin() + distance).getPointer(), value);
 				_size++;
 				return begin();
+			}
+
+			template< class InputIt >
+			void insert( iterator pos, InputIt first, InputIt last) {
+				for (; first != last; pos++, first++)
+					pos = insert(pos, *first);
 			}
 
 			void push_back(const T& value) {
@@ -262,29 +273,45 @@ namespace ft {
 					this->_array[i] = tmp[i];
 				_allocator.deallocate(tmp, index);
 			}
+		
+			void assign( size_type count, const T& value ) {
+				clear();
+				for (size_type index = 0; index < count; index++)
+					_allocator.construct(_array + index, value);
+			}
+
+			template< class InputIt >
+			void assign( InputIt first, InputIt last ) {
+				clear();
+				insert(begin(), first, last);
+			}
 		};
 
 		template< class T, class Alloc >
 		bool operator==( const ft::vector<T,Alloc>& lhs,
-			const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() == rhs.getPointer();}
+			const ft::vector<T,Alloc>& rhs ) {return lhs.data() == rhs.data();}
 
 		template< class T, class Alloc >
 		bool operator!=( const ft::vector<T,Alloc>& lhs,
-                 const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() != rhs.getPointer();}
+                 const ft::vector<T,Alloc>& rhs ) {return lhs.data() != rhs.data();}
 
 		template< class T, class Alloc >
 		bool operator<( const ft::vector<T,Alloc>& lhs,
-                const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() < rhs.getPointer();}
+                const ft::vector<T,Alloc>& rhs ) {return lhs.data() < rhs.data();}
 
 		template< class T, class Alloc >
 		bool operator<=( const ft::vector<T,Alloc>& lhs,
-                 const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() <= rhs.getPointer();}
+                 const ft::vector<T,Alloc>& rhs ) {return lhs.data() <= rhs.data();}
 
 		template< class T, class Alloc >
 		bool operator>( const ft::vector<T,Alloc>& lhs,
-                const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() > rhs.getPointer();}
+                const ft::vector<T,Alloc>& rhs ) {return lhs.data() > rhs.data();}
 
 		template< class T, class Alloc >
 		bool operator>=( const ft::vector<T,Alloc>& lhs,
-                 const ft::vector<T,Alloc>& rhs ) {return lhs.getPointer() >= rhs.getPointer();}
+                 const ft::vector<T,Alloc>& rhs ) {return lhs.data() >= rhs.data();}
+
+		template< class T, class Alloc >
+		void swap( std::vector<T,Alloc>& lhs,
+           std::vector<T,Alloc>& rhs ) {lhs.swap(rhs);}
 }
