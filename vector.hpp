@@ -92,6 +92,24 @@ namespace ft {
 				_array = _allocator.allocate(0);
 			}
 
+			explicit vector( const Allocator& alloc ): _size(0), _capacity(0) {
+				_allocator = alloc;
+				_array = _allocator.allocate(0);
+			}
+
+			explicit vector( size_type count,
+				const T& value = T(),
+				const Allocator& alloc = Allocator())
+				:
+					_size(0),
+					_capacity(0)
+				{
+					_allocator = alloc;
+					_array = _allocator.allocate(count * 1.25);
+					for (size_type index = 0; index < count; index++)
+						insert(begin() + index, value);
+				}
+
 			vector(const vector<T> & other) {
 				if ((*this) != other)
 					*this = other;
@@ -148,6 +166,13 @@ namespace ft {
 				return counter;
 			}
 
+			/**
+			 * @brief insert value in specified pos
+			 * 
+			 * @param pos 
+			 * @param value 
+			 * @return iterator 
+			 */
 			iterator insert(iterator pos, const T& value) {
 				size_type distance = getDistance(begin(), pos);
 				if (_capacity < _size + 1)
@@ -165,6 +190,14 @@ namespace ft {
 				return begin();
 			}
 
+			/**
+			 * @brief inserts values in range(first, last) to pos
+			 * 
+			 * @tparam InputIt 
+			 * @param pos 
+			 * @param first 
+			 * @param last 
+			 */
 			template< class InputIt >
 			void insert( iterator pos, InputIt first, InputIt last) {
 				for (; first != last; pos++, first++)
@@ -246,6 +279,13 @@ namespace ft {
 				return pos;
 			}
 
+			/**
+			 * @brief erase elements from first to last
+			 * 
+			 * @param first 
+			 * @param last 
+			 * @return iterator to next to deleted element
+			 */
 			iterator erase( iterator first, iterator last ) {
 				size_type distance = getDistance(first, last);
 				iterator it = first;
@@ -253,7 +293,11 @@ namespace ft {
 					it = erase(it);
 				return it;
 			}
-		
+
+			/**
+			 * @brief exchange contents of two vectors
+			 * @param other 
+			 */
 			void swap( vector& other ) {
 				if (this->capacity() < other.size())
 					this->resize(other.size() * 1.3);
@@ -277,7 +321,7 @@ namespace ft {
 			void assign( size_type count, const T& value ) {
 				clear();
 				for (size_type index = 0; index < count; index++)
-					_allocator.construct(_array + index, value);
+					insert(_array + index, value);
 			}
 
 			template< class InputIt >
