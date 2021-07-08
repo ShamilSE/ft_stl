@@ -4,6 +4,7 @@
 #include <iostream>
 #include <exception>
 #include <string>
+#include <type_traits>
 
 namespace ft {
 
@@ -109,6 +110,26 @@ namespace ft {
 					for (size_type index = 0; index < count; index++)
 						insert(begin() + index, value);
 				}
+
+			/**
+			 * @brief range constructor
+			 * 
+			 * @tparam InputIt 
+			 * @param first 
+			 * @param last 
+			 * @param alloc 
+			 */
+            template <class InputIt>
+            vector(InputIt first, InputIt last, const allocator_type& alloc = allocator_type(),
+					typename std::enable_if<!std::is_integral<InputIt>::value >::type* = 0)
+					:
+						_size(0),
+						_capacity(0)
+					{
+						_allocator = alloc;
+						_allocator.allocate(0);
+						assign(first, last);
+					}
 
 			vector(const vector<T> & other) {
 				if ((*this) != other)
