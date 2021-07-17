@@ -1,72 +1,66 @@
 # pragma once
 
-#include <deque>
+#include <iostream>
+#include "vector.hpp"
 
 namespace ft {
 
-template <class T, class Container = std::deque<T> >
+template <class T, class Container = ft::vector<T> >
 class stack {
-    public:
-        typedef   Container                  container_type;
-        typedef   Container::value_type      value_type;
-        typedef   Container::size_type       size_type;
-        typedef   Container::reference       reference;
-        typedef   Container::const_reference const_reference;
-        typedef   size_t                     size_type;
+public:
+	typedef				Container					container_type;
+	typedef	typename	Container::value_type		value_type;
+	typedef	typename	Container::size_type		size_type;
+	typedef	typename	Container::reference		reference;
+	typedef	typename	Container::const_reference	const_reference;
 
-    private:
-        size_type  _size;
-        size_type  _capacity;
+private:
+	container_type	_container;
 
-    public:
-        stack(): _size(0), _capacity(0) {}
-        stack(const stack & other) {}
+public:
+	stack() {}
 
-        stack& operator=(const stack & other) {
-            return *this;
-        }
+	stack( stack & other) {*this = other;}
 
-        ~stack() {}
+	stack& operator=( stack & other) {
+		this->_container = other._container;
+		return *this;
+	}
 
+	~stack() {}
 
-        reference top();
-        const_reference top() const;
+	/**
+	 * @brief Returns reference to the top element in the stack. This is the most recently pushed element.
+	 * 
+	 * @return reference 
+	 */
+	reference top() {return _container.back();}
+	const_reference top() const {_container.back();}
 
-        bool empty() const {return _size == 0;}
-        size_type size() const {return _size;}
-	
-        void push( const value_type& value );
-		void pop();
+	bool empty() const {return _container.empty();}
+	size_type size() const {return _container.size();}
+
+	void push( const value_type& value ) {_container.push_back(value);}
+
+	void pop() {_container.pop_back();}
 };
 
 template< class T, class Container >
-bool operator==( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {
-    return lhs == rhs;
-}
+bool operator==( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {return lhs == rhs;}
 
 template< class T, class Container >
-bool operator!=( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {
-    return lhs != rhs;
-}
+bool operator!=( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {return lhs != rhs;}
 
 template< class T, class Container >
-bool operator<( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {
-    return lhs < rhs;
-}
+bool operator<( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {return lhs < rhs;}
 
 template< class T, class Container >
-bool operator<=( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {
-    return lhs <= rhs;
-}
+bool operator<=( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {return lhs <= rhs;}
 
 template< class T, class Container >
-bool operator>( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {
-    return lhs > rhs;
-}
+bool operator>( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {return lhs > rhs;}
 
 template< class T, class Container >
-bool operator>=( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {
-    return lhs >= lhs;
-}
+bool operator>=( const ft::stack<T,Container>& lhs, const ft::stack<T,Container>& rhs ) {return lhs >= rhs;}
 
 }

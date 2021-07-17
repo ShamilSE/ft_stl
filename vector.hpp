@@ -136,8 +136,9 @@ namespace ft {
 					*this = other;
 			}
 
-			vector &operator=(const vector<T> & other) {
-				_array = other._array;
+			vector &operator=( vector<T> & other) {
+				this->_allocator = other._allocator;
+				assign(other.begin(), other.end());
 				return *this;
 			}
 
@@ -289,8 +290,13 @@ namespace ft {
 			reference front() {return *(begin());}
 			const_reference front() const {return *(begin());}
 
-			reference back() {return (end() - 1);}
-			const_reference back() const {return (end() -1);}
+			/**
+			 * @brief get last element value
+			 * 
+			 * @return reference 
+			 */
+			reference back() {return *(end() - 1);}
+			const_reference back() const {return *(end() -1);}
 
 			iterator erase( iterator pos ) {
 				size_type distance = getDistance(pos, end());

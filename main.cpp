@@ -1,14 +1,10 @@
-#include "vector.hpp"
-#include <list>
-#include <vector>
-#include "SomeClass.hpp"
-#include <iostream>
 
-
+void vector_test();
+void stack_test();
 
 int main(void) {
 
-
+	stack_test();
 
 	return 0;
 }

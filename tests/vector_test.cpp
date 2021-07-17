@@ -1,13 +1,12 @@
+#include "../vector.hpp"
+#include <list>
+#include <vector>
+#include <stack>
+#include "../SomeClass.hpp"
+#include <iostream>
+
 void push_back() {
 	ft::vector<SomeClass> vector;
-	SomeClass some("name", 2112);
-
-	vector.push_back(some);
-	std::cout << "hello world" << std::endl;
-}
-
-void memory_dup_check() {
-	std::vector<SomeClass> vector;
 	SomeClass some("name", 2112);
 
 	vector.push_back(some);
@@ -208,28 +207,9 @@ void swap_method_my() {
 
 }
 
-void vector_operators_my() {
-	ft::vector<int> vector;
-	ft::vector<int> vector2;
-
-	std::cout << vector.getPointer() << " equals " << vector.getPointer() <<  (vector == vector ? " true" : " false") << std::endl;
-	std::cout << vector.getPointer() << " equals " << vector2.getPointer() <<  (vector == vector2 ? " true" : " false") << std::endl;
-	
-	std::cout << "=============" << std::endl;
-
-	std::cout << vector.getPointer() << " not equals " << vector.getPointer() << (vector != vector ? " true" : " false") << std::endl;
-	std::cout << vector.getPointer() << " not equals " << vector2.getPointer() << (vector != vector2 ? " true" : " false") << std::endl;
-}
 
 void vector_test() {
-	std::cout << "======================" << std::endl;
-	std::cout << "my output" << std::endl;
-	std::cout << "======================" << std::endl;
-	memory_dup_check_my();
-	std::cout << "======================" << std::endl;
-	std::cout << "original output" << std::endl;
-	std::cout << "======================" << std::endl;
-	memory_dup_check();
+
 
 	pop_back_my();
 
@@ -250,5 +230,5 @@ void vector_test() {
 	erase_method_origin();
 
 	swap_method_my();
-	vector_operators_my();
+
 }
