@@ -1,7 +1,7 @@
 NAME = containers
-SRC = tests/stack_test.cpp main.cpp
+SRC = tests/stack_test.cpp tests/map_test.cpp main.cpp
 INC = vector.hpp SomeClass.hpp map.hpp stack.hpp
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
+CFLAGS = -Wall -Wextra -Werror -std=c++11 -g
 
 all: $(NAME)
 

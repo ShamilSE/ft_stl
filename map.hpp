@@ -5,110 +5,195 @@
 
 namespace ft {
 
-	template<class T>
-	class iterator {
-		iterator() {}
-		iterator(const iterator & other) {}
-		iterator& operator=(const iterator & other) {}
-		~iterator() {}
-	};
+template<class T>
+class node {
+private:
+	T*						_data;
+	std::string				_colour;
 
-	template<class T>
-	class reverse_iterator {
-		reverse_iterator() {}
-		reverse_iterator(const reverse_iterator & other) {}
-		reverse_iterator& operator=(const reverse_iterator & other) {}
-		~reverse_iterator() {}
-	};
+public:
+	node(T* data): _data(data) {}
 
-	template<
-			class Key,
-			class T,
-			class Compare = std::less<Key>,
-			class Allocator = std::allocator<std::pair<const Key, T> >
-			>
-	class map {
-		/*
-			Member types
-		*/
-		public:
-			typedef Key									key_type;
-			typedef T									mapped_type;
-			typedef	std::pair<const Key, T>				value_type;
-			typedef size_t								size_type;
-			typedef Allocator							allocator_type;
-			typedef value_type&							reference;
-			typedef const value_type&					const_reference;
-			typedef Allocator::pointer					pointer;
-			typedef Allocator::const_pointer			const_pointer;
-			typedef iterator<T>							itearator;
-			typedef iterator<const T>					const_iterator;
-			typedef reverse_iterator<T>					reverse_iterator;
-			typedef reverse_iterator<const T>			const_reverse_iterator;
+};
 
-		private:
-			allocator_type	_allocator;
+template<class T>
+class iterator {
+private:
+	node<T>* _node;
 
-		public:
-		/* 
-			Member functions
-		*/
-			map() {}
-			map& operator=(const map & other) {}
-			~map() {}
-			allocator_type get_allocator() const {return _allocator;}
+public:
+	iterator(node<T>* node): _node(node) {}
 
-			// element access
-			T& at( const Key& key );
-			const T& at( const Key& key ) const;
+	iterator(const iterator & other) {(void)other;}
 
-			T& operator[]( const Key& key );
+	iterator& operator=(const iterator & other) {(void)other;}
+	~iterator() {}
+};
 
-			// capacity
-			bool empty() const;
+template<class T>
+class reverse_iterator {
+	reverse_iterator() {}
+	reverse_iterator(const reverse_iterator & other) {(void)other;}
+	reverse_iterator& operator=(const reverse_iterator & other) {(void)other;}
+	~reverse_iterator() {}
+};
 
-			size_type size() const;
+template<
+	class T1,
+    class T2
+>
+struct pair {
+	T1*	first;
+	T2*	second;
 
-			size_type max_size() const;
+	pair(): first(nullptr), second(nullptr) {}
 
-			// modifiers
-			void clear();
+	pair( const T1& x, const T2& y ) {
+		*first = x;
+		*second = y;
+	}
 
-			iterator insert( iterator hint, const value_type& value );
+	template< class U1, class U2 >
+	pair( const pair<U1, U2>& p );
+};
 
-			void erase( iterator pos );
+template<
+		class Key,
+		class T,
+		class Compare = std::less<Key>,
+		class Allocator = std::allocator<ft::pair<const Key, T> >
+		>
+class map {
+	/*
+		Member types
+	*/
+	public:
+		typedef 	Key									key_type;
+		typedef 	T									mapped_type;
+		typedef		ft::pair<const Key, T>				value_type;
+		typedef		size_t								size_type;
+		typedef		Allocator							allocator_type;
+		typedef		value_type&							reference;
+		typedef		const value_type&					const_reference;
+		typedef 	typename Allocator::pointer			pointer;
+		typedef 	typename Allocator::const_pointer	const_pointer;
+		typedef		iterator<value_type>				iterator;
+		// typedef		iterator<const value_type>					const_iterator;
+		typedef 	reverse_iterator<T>					reverse_iterator;
+		// typedef 	reverse_iterator<const T>			const_reverse_iterator;
 
-			void erase( iterator first, iterator last );
+	private:
+		allocator_type	_allocator;
+		size_type		_size;
+		
+	public:
+	/* 
+		Member functions
+	*/
+		map() {}
 
-			void swap( map& other );
+		map(const map & other) {
+			*this = other;
+		}
 
-			// lookup
-			size_type count( const Key& key ) const;
+		map& operator=(const map & other) {
+			(void)other;
+		}
 
-			iterator find( const Key& key );
+		~map() {}
+		allocator_type get_allocator() const {return _allocator;}
 
-			const_iterator find( const Key& key ) const;
+		// element access
+		T& at( const Key& key ) {
+			(void)key;
+		}
 
-			std::pair<iterator,iterator>
-			equal_range( const Key& key );
+		const T& at( const Key& key ) const {
+			(void)key;
+		}
 
-			std::pair<const_iterator,const_iterator>
-			equal_range( const Key& key ) const;
+		T& operator[]( const Key& key ) {
+			(void)key;
+		}
 
-			iterator lower_bound( const Key& key );
+		// iterators
+		// iterator begin() {
+		// 	return iterator(new node<T>(new pair<int, int>));
+		// }
+		// const_iterator begin();
+		iterator end();
+		// const_iterator end();
+		// reverse_iterator begin();
 
-			const_iterator lower_bound( const Key& key ) const;
+		// reverse_iterator end();
 
-			iterator upper_bound( const Key& key );
+		// capacity
+		bool empty() const {return _size == 0;}
 
-			const_iterator upper_bound( const Key& key ) const;
+		size_type size() const {return _size;}
 
-			//observers
-			key_compare key_comp() const;
+		size_type max_size() const;
 
-			std::map::value_compare value_comp() const;
+		// modifiers
+		void clear();
 
-	};
+		ft::pair<iterator, bool> insert( const value_type& value ) {
+			(void)value;
+		}
+
+		template< class InputIt >
+		void insert( InputIt first, InputIt last );
+
+		void erase( iterator pos ) {
+			(void)pos;
+		}
+
+		void erase( iterator first, iterator last ) {
+			(void)first;
+			(void)last;
+		}
+
+		void swap( map& other ) {
+			(void)other;
+		}
+
+		// lookup
+		size_type count( const Key& key ) const {
+			(void)key;
+		}
+
+		iterator find( const Key& key ) {
+			(void)key;
+		}
+
+		// const_iterator find( const Key& key ) const {
+		// 	(void)key;
+		// }
+
+		// std::pair<iterator,iterator>
+		// equal_range( const Key& key ) {
+		// 	(void)key;
+		// }
+
+		// std::pair<const_iterator,const_iterator>
+		// equal_range( const Key& key ) const {
+		// 	(void)key;
+		// }
+
+		// iterator lower_bound( const Key& key ) {(void)key;}
+
+		// const_iterator lower_bound( const Key& key ) const {(void)key;}
+
+		// iterator upper_bound( const Key& key ) {(void)key;}
+
+		// const_iterator upper_bound( const Key& key ) const {(void)key;}
+
+		//observers
+		// key_compare key_comp() const;
+
+		// map::value_compare value_comp() const;
+
+};
 
 
 
