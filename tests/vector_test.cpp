@@ -1,8 +1,10 @@
 #include "../vector.hpp"
+#include "vector_test.h"
+#include "../SomeClass.hpp"
+
 #include <list>
 #include <vector>
 #include <stack>
-#include "../SomeClass.hpp"
 #include <iostream>
 
 void push_back() {

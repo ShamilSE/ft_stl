@@ -1,5 +1,9 @@
 #pragma once
 
+extern "C" {
+	#include "utils/libutils.h"
+}
+
 #include <memory>
 #include <iostream>
 #include <exception>
@@ -15,6 +19,7 @@ namespace ft {
 
 		public:
 			typedef reverseVectorIterator<T>	r_iterator;
+			typedef std::ptrdiff_t difference_type;
 
 			reverseVectorIterator() {}
 			reverseVectorIterator(T* _array): _ptr(_array) {}
@@ -113,11 +118,11 @@ namespace ft {
 
 			/**
 			 * @brief range constructor
-			 * 
-			 * @tparam InputIt 
-			 * @param first 
-			 * @param last 
-			 * @param alloc 
+			 *
+			 * @tparam InputIt
+			 * @param first
+			 * @param last
+			 * @param alloc
 			 */
             template <class InputIt>
             vector(InputIt first, InputIt last, const allocator_type& alloc = allocator_type(),
@@ -190,10 +195,10 @@ namespace ft {
 
 			/**
 			 * @brief insert value in specified pos
-			 * 
-			 * @param pos 
-			 * @param value 
-			 * @return iterator 
+			 *
+			 * @param pos
+			 * @param value
+			 * @return iterator
 			 */
 			iterator insert(iterator pos, const T& value) {
 				size_type distance = getDistance(begin(), pos);
@@ -201,7 +206,7 @@ namespace ft {
 					reserve((_size + 1) * 1.25);
 				if (_size) {
 					iterator newPos = begin() + distance;
-					std::memmove(
+					ft_memmove(
 						newPos.getPointer() + 1,
 						newPos.getPointer(),
 						sizeof(value_type) * (end().getPointer() - newPos.getPointer())
@@ -214,11 +219,11 @@ namespace ft {
 
 			/**
 			 * @brief inserts values in range(first, last) to pos
-			 * 
-			 * @tparam InputIt 
-			 * @param pos 
-			 * @param first 
-			 * @param last 
+			 *
+			 * @tparam InputIt
+			 * @param pos
+			 * @param first
+			 * @param last
 			 */
 			template< class InputIt >
 			void insert( iterator pos, InputIt first, InputIt last) {
@@ -292,8 +297,8 @@ namespace ft {
 
 			/**
 			 * @brief get last element value
-			 * 
-			 * @return reference 
+			 *
+			 * @return reference
 			 */
 			reference back() {return *(end() - 1);}
 			const_reference back() const {return *(end() -1);}
@@ -302,15 +307,15 @@ namespace ft {
 				size_type distance = getDistance(pos, end());
 				_allocator.destroy(pos.getPointer());
 				_size--;
-				std::memmove(pos.getPointer(), pos.getPointer() + 1, sizeof(value_type) * distance);
+				ft_memmove(pos.getPointer(), pos.getPointer() + 1, sizeof(value_type) * distance);
 				return pos;
 			}
 
 			/**
 			 * @brief erase elements from first to last
-			 * 
-			 * @param first 
-			 * @param last 
+			 *
+			 * @param first
+			 * @param last
 			 * @return iterator to next to deleted element
 			 */
 			iterator erase( iterator first, iterator last ) {
@@ -323,16 +328,16 @@ namespace ft {
 
 			/**
 			 * @brief exchange contents of two vectors
-			 * @param other 
+			 * @param other
 			 */
 			void swap( vector& other ) {
 				if (this->capacity() < other.size())
 					this->resize(other.size() * 1.3);
 				if (other.capacity() < this->size())
 					other.resize(this->size() * 1.3);
-				
+
 				pointer tmp = _allocator.allocate(other.size());
-				
+
 				size_type index;
 				for (index = 0; this->_size > index; index++)
 					tmp[index] = other._array[index];
@@ -344,7 +349,7 @@ namespace ft {
 					this->_array[i] = tmp[i];
 				_allocator.deallocate(tmp, index);
 			}
-		
+
 			void assign( size_type count, const T& value ) {
 				clear();
 				for (size_type index = 0; index < count; index++)
@@ -382,7 +387,9 @@ namespace ft {
 		bool operator>=( const ft::vector<T,Alloc>& lhs,
                  const ft::vector<T,Alloc>& rhs ) {return lhs.data() >= rhs.data();}
 
+/*
 		template< class T, class Alloc >
 		void swap( std::vector<T,Alloc>& lhs,
            std::vector<T,Alloc>& rhs ) {lhs.swap(rhs);}
+					 */
 }
