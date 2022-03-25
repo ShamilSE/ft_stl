@@ -209,10 +209,38 @@ void swap_method_my() {
 
 }
 
+void enable_if_check()
+{
+	ft::vector<int> ints_vec;
+
+	ints_vec.push_back(101);
+	ints_vec.push_back(23);
+
+	ints_vec.printAll();
+
+	ft::vector<int> another_vec(ints_vec.begin(), --(ints_vec.end()));
+	another_vec.printAll();
+    ////////////////////////////
+    std::cout << "---------------------------" << std::endl;
+    std::vector<int> ints_vec_origin;
+
+    ints_vec_origin.push_back(101);
+    ints_vec_origin.push_back(23);
+
+    for (std::vector<int>::iterator a = ints_vec_origin.begin(); a != ints_vec_origin.end(); a++)
+    {
+        std::cout << *a << std::endl;
+    }
+
+    std::vector<int> another_orig_vec(ints_vec_origin.begin(), --(ints_vec_origin.end()));
+    for (std::vector<int>::iterator a = another_orig_vec.begin(); a != another_orig_vec.end(); a++)
+    {
+        std::cout << *a << std::endl;
+    }
+}
 
 void vector_test() {
-
-
+	/*
 	pop_back_my();
 
 	index_operator_check_my();
@@ -232,5 +260,7 @@ void vector_test() {
 	erase_method_origin();
 
 	swap_method_my();
+	*/
+	enable_if_check();
 
 }
