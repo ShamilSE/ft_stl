@@ -19,4 +19,11 @@ bool is_integral();
 template<typename T, typename Allocator = std::allocator<T> >
 class vector;
 
+//enable_if
+template<bool _B, class _T = void>
+struct    enable_if {};
+
+template<class _T>
+struct    enable_if<true, _T> { typedef _T type; };
+
 }

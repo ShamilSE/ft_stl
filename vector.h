@@ -121,16 +121,17 @@ namespace ft {
 			 * @param alloc
 			 */
             template <class InputIt>
-            vector(InputIt first, InputIt last, const allocator_type& alloc = allocator_type(),
-					typename std::enable_if<!std::is_integral<InputIt>::value >::type* = 0)
-					:
-						_size(0),
-						_capacity(0)
-					{
-						_allocator = alloc;
-						_allocator.allocate(0);
-						assign(first, last);
-					}
+            vector(InputIt first, InputIt last, const Allocator& alloc = Allocator()
+			,typename ft::enable_if<std::__is_input_iterator<InputIt>::value>::type* = nullptr
+				)
+			:
+				_size(0),
+				_capacity(0)
+			{
+				_allocator = alloc;
+				_array = _allocator.allocate(0);
+				assign(first, last);
+			}
 
 			vector(const vector<T> & other) {
 				if ((*this) != other)
@@ -170,14 +171,9 @@ namespace ft {
 
 
 			iterator begin() {return iterator(_array);}
-			//const_iterator cbegin() const {return const_iterator(_array);}
 			iterator end() {return iterator(_array + _size);}
-			//const_iterator cend() const {return const_iterator(_array + _size);}
 			reverse_iterator rbegin() {return reverse_iterator(_array + _size - 1);}
 			reverse_iterator rend() {return reverse_iterator(_array - 1);}
-			//const_reverse_iterator crbegin() const {return const_reverse_iterator(_array + _size -1);}
-			//const_reverse_iterator crend() const {return const_reverse_iterator(_array -1);}
-
 
 			size_type getDistance(iterator start, iterator end) {
 				size_type counter = 0;
@@ -222,7 +218,9 @@ namespace ft {
 			 * @param last
 			 */
 			template< class InputIt >
-			void insert( iterator pos, InputIt first, InputIt last) {
+			void insert( iterator pos, InputIt first, InputIt last,
+				typename ft::enable_if<std::__is_input_iterator<InputIt>::value>::type* = nullptr )
+			{
 				for (; first != last; pos++, first++)
 					pos = insert(pos, *first);
 			}
@@ -247,9 +245,11 @@ namespace ft {
 						_allocator.construct(newArray + index, *(_array + index));
 						_allocator.destroy(_array + index);
 					}
-					_allocator.deallocate(_array, _capacity);
-					_capacity = new_cap;
-					_array = newArray;
+					if (size() > 0) {
+						_allocator.deallocate(_array, _capacity);
+						_capacity = new_cap;
+						_array = newArray;
+					}
 				}
 			}
 
@@ -353,8 +353,10 @@ namespace ft {
 			}
 
 			template< class InputIt >
-			void assign( InputIt first, InputIt last ) {
-				clear();
+			void assign( InputIt first, InputIt last ,
+				typename enable_if<std::__is_input_iterator<InputIt>::value>::type* = nullptr )
+			{
+                clear();
 				insert(begin(), first, last);
 			}
 		};
@@ -382,10 +384,4 @@ namespace ft {
 		template< class T, class Alloc >
 		bool operator>=( const ft::vector<T,Alloc>& lhs,
                  const ft::vector<T,Alloc>& rhs ) {return lhs.data() >= rhs.data();}
-
-/*
-		template< class T, class Alloc >
-		void swap( std::vector<T,Alloc>& lhs,
-           std::vector<T,Alloc>& rhs ) {lhs.swap(rhs);}
-					 */
 }
