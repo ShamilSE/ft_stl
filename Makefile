@@ -8,7 +8,7 @@ VECTOR_TEST = tests/vector_test.cpp
 
 SRC = main.cpp
 #INC = vector.hpp SomeClass.hpp map.hpp stack.hpp
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 all: $(NAME)
 
@@ -21,9 +21,12 @@ $(NAME): make_lib $(SRC) $(UTC)
 	clang++ $(CFLAGS) $(SRC) $(VECTOR_TEST) -c
 	clang++ main.o vector_test.o -L utils -lutils -o $(NAME)
 
+clean:
+	rm $(UTILS_O)
+	rm *.o
 
-fclean:
-	rm -rf $(NAME)
+fclean: clean
+	rm $(NAME)
 
 re: fclean all
 
