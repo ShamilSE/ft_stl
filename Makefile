@@ -27,6 +27,7 @@ clean:
 
 fclean: clean
 	rm $(NAME)
+	rm $(UTILS_LIB)
 
 re: fclean all
 
