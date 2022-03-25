@@ -14,34 +14,6 @@ extern "C" {
 
 namespace ft {
 
-	template<typename T>
-	class reverseVectorIterator {
-		private:
-			T* _ptr;
-
-		public:
-			typedef reverseVectorIterator<T>	r_iterator;
-			typedef std::ptrdiff_t difference_type;
-
-			reverseVectorIterator() {}
-			reverseVectorIterator(T* _array): _ptr(_array) {}
-
-			T& operator*() {return *_ptr;}
-			r_iterator operator++() {_ptr -= 1; return *this;}
-			r_iterator operator++(int) {_ptr -= 1; return *this;}
-			r_iterator operator--() {_ptr += 1; return *this;}
-			r_iterator operator--(int) {_ptr += 1; return *this;}
-			r_iterator operator+(int n) {_ptr -= n; return *this;}
-			r_iterator operator-(int n) {_ptr += n; return *this;}
-
-			bool operator>(const reverseVectorIterator& other) {return _ptr > other._ptr;}
-			bool operator>=(const reverseVectorIterator& other) {return _ptr >= other._ptr;}
-			bool operator<(const reverseVectorIterator& other) {return _ptr < other._ptr;}
-			bool operator<=(const reverseVectorIterator& other) {return _ptr <= other._ptr;}
-			bool operator==(const reverseVectorIterator& other) {return _ptr == other._ptr;}
-			bool operator!=(const reverseVectorIterator& other) {return _ptr != other._ptr;}
-	};
-
 	template<typename T, typename Allocator >
 	class vector {
 
@@ -49,8 +21,6 @@ namespace ft {
 		public:
 			typedef T											value_type;
 			typedef const value_type							const_value_type;
-			typedef reverseVectorIterator<value_type>			reverse_iterator;
-			typedef reverseVectorIterator<const_value_type>		const_reverse_iterator;
 			typedef Allocator									allocator_type;
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
@@ -58,6 +28,7 @@ namespace ft {
 			typedef value_type&									reference;
 			typedef const value_type&							const_reference;
 			class iterator;
+			class reverse_iterator;
 
 		private:
 			size_type	_size;
@@ -74,7 +45,7 @@ namespace ft {
 
 			iterator(T* _array): _ptr(_array) {}
 
-			iterator() {}
+			iterator(): _ptr(nullptr) {}
 			T& operator*() {return *_ptr;}
 			iterator operator++(int) {_ptr += 1; return *this;}
 			iterator operator++() {_ptr += 1; return *this;}
@@ -92,6 +63,33 @@ namespace ft {
 
 			T* getPointer() {return _ptr;}
 		};
+
+		class reverse_iterator : public iterator_traits<std::random_access_iterator_tag, value_type> {
+		private:
+			T* _ptr;
+
+		public:
+			typedef std::ptrdiff_t difference_type;
+
+			reverse_iterator(): _ptr(nullptr) {}
+			reverse_iterator(T* _array): _ptr(_array) {}
+
+			T& operator*() {return *_ptr;}
+			reverse_iterator operator++() {_ptr -= 1; return *this;}
+			reverse_iterator operator++(int) {_ptr -= 1; return *this;}
+			reverse_iterator operator--() {_ptr += 1; return *this;}
+			reverse_iterator operator--(int) {_ptr += 1; return *this;}
+			reverse_iterator operator+(int n) {_ptr -= n; return *this;}
+			reverse_iterator operator-(int n) {_ptr += n; return *this;}
+
+			bool operator>(const reverse_iterator& other) {return _ptr > other._ptr;}
+			bool operator>=(const reverse_iterator& other) {return _ptr >= other._ptr;}
+			bool operator<(const reverse_iterator& other) {return _ptr < other._ptr;}
+			bool operator<=(const reverse_iterator& other) {return _ptr <= other._ptr;}
+			bool operator==(const reverse_iterator& other) {return _ptr == other._ptr;}
+			bool operator!=(const reverse_iterator& other) {return _ptr != other._ptr;}
+		};
+
 			vector(): _size(0), _capacity(0) {
 				_array = _allocator.allocate(0);
 			}
@@ -177,8 +175,8 @@ namespace ft {
 			//const_iterator cend() const {return const_iterator(_array + _size);}
 			reverse_iterator rbegin() {return reverse_iterator(_array + _size - 1);}
 			reverse_iterator rend() {return reverse_iterator(_array - 1);}
-			const_reverse_iterator crbegin() const {return const_reverse_iterator(_array + _size -1);}
-			const_reverse_iterator crend() const {return const_reverse_iterator(_array -1);}
+			//const_reverse_iterator crbegin() const {return const_reverse_iterator(_array + _size -1);}
+			//const_reverse_iterator crend() const {return const_reverse_iterator(_array -1);}
 
 
 			size_type getDistance(iterator start, iterator end) {
