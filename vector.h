@@ -10,6 +10,8 @@ extern "C" {
 #include <string>
 #include <type_traits>
 
+#include "ft.h"
+
 namespace ft {
 
 	template<typename T>
@@ -40,44 +42,13 @@ namespace ft {
 			bool operator!=(const reverseVectorIterator& other) {return _ptr != other._ptr;}
 	};
 
-	template<typename T>
-	class vectorIterator {
-		private:
-			T*	_ptr;
-
-		public:
-			typedef vectorIterator<T>	iterator;
-
-			vectorIterator(T* _array): _ptr(_array) {}
-
-			vectorIterator() {}
-			T& operator*() {return *_ptr;}
-			iterator operator++(int) {_ptr += 1; return *this;}
-			iterator operator++() {_ptr += 1; return *this;}
-			iterator operator--() {_ptr -= 1; return *this;}
-			iterator operator--(int) {_ptr -= 1; return *this;}
-			iterator operator+(int n) {_ptr += n; return *this;}
-			iterator operator-(int n) {_ptr -= n; return *this;}
-
-			bool operator>(const vectorIterator& other) {return _ptr > other._ptr;}
-			bool operator>=(const vectorIterator& other) {return _ptr >= other._ptr;}
-			bool operator<(const vectorIterator& other) {return _ptr < other._ptr;}
-			bool operator<=(const vectorIterator& other) {return _ptr <= other._ptr;}
-			bool operator==(const vectorIterator& other) {return _ptr == other._ptr;}
-			bool operator!=(const vectorIterator& other) {return _ptr != other._ptr;}
-
-			T* getPointer() {return _ptr;}
-	};
-
-	template<typename T, typename Allocator = std::allocator<T> >
+	template<typename T, typename Allocator >
 	class vector {
 
 
 		public:
 			typedef T											value_type;
 			typedef const value_type							const_value_type;
-			typedef vectorIterator<value_type>					iterator;
-			typedef vectorIterator<const_value_type>			const_iterator;
 			typedef reverseVectorIterator<value_type>			reverse_iterator;
 			typedef reverseVectorIterator<const_value_type>		const_reverse_iterator;
 			typedef Allocator									allocator_type;
@@ -86,6 +57,7 @@ namespace ft {
 			typedef size_t										size_type;
 			typedef value_type&									reference;
 			typedef const value_type&							const_reference;
+			class iterator;
 
 		private:
 			size_type	_size;
@@ -94,6 +66,32 @@ namespace ft {
 			allocator_type	_allocator;
 
 		public:
+		class iterator : public iterator_traits<std::random_access_iterator_tag, value_type> {
+			private:
+				T*	_ptr;
+
+			public:
+
+			iterator(T* _array): _ptr(_array) {}
+
+			iterator() {}
+			T& operator*() {return *_ptr;}
+			iterator operator++(int) {_ptr += 1; return *this;}
+			iterator operator++() {_ptr += 1; return *this;}
+			iterator operator--() {_ptr -= 1; return *this;}
+			iterator operator--(int) {_ptr -= 1; return *this;}
+			iterator operator+(int n) {_ptr += n; return *this;}
+			iterator operator-(int n) {_ptr -= n; return *this;}
+
+			bool operator>(const iterator& other) {return _ptr > other._ptr;}
+			bool operator>=(const iterator& other) {return _ptr >= other._ptr;}
+			bool operator<(const iterator& other) {return _ptr < other._ptr;}
+			bool operator<=(const iterator& other) {return _ptr <= other._ptr;}
+			bool operator==(const iterator& other) {return _ptr == other._ptr;}
+			bool operator!=(const iterator& other) {return _ptr != other._ptr;}
+
+			T* getPointer() {return _ptr;}
+		};
 			vector(): _size(0), _capacity(0) {
 				_array = _allocator.allocate(0);
 			}
@@ -174,9 +172,9 @@ namespace ft {
 
 
 			iterator begin() {return iterator(_array);}
-			const_iterator cbegin() const {return const_iterator(_array);}
+			//const_iterator cbegin() const {return const_iterator(_array);}
 			iterator end() {return iterator(_array + _size);}
-			const_iterator cend() const {return const_iterator(_array + _size);}
+			//const_iterator cend() const {return const_iterator(_array + _size);}
 			reverse_iterator rbegin() {return reverse_iterator(_array + _size - 1);}
 			reverse_iterator rend() {return reverse_iterator(_array - 1);}
 			const_reverse_iterator crbegin() const {return const_reverse_iterator(_array + _size -1);}
