@@ -1,13 +1,8 @@
 #pragma once
 
-extern "C" {
-	#include "utils/libutils.h"
-}
-
 #include <memory>
 #include <iostream>
 #include <exception>
-#include <string>
 #include <type_traits>
 
 #include "ft.h"
@@ -198,7 +193,7 @@ namespace ft {
 					reserve((_size + 1) * 1.25);
 				if (_size) {
 					iterator newPos = begin() + distance;
-					ft_memmove(
+					std::memmove(
 						newPos.getPointer() + 1,
 						newPos.getPointer(),
 						sizeof(value_type) * (end().getPointer() - newPos.getPointer())
@@ -303,7 +298,7 @@ namespace ft {
 				size_type distance = getDistance(pos, end());
 				_allocator.destroy(pos.getPointer());
 				_size--;
-				ft_memmove(pos.getPointer(), pos.getPointer() + 1, sizeof(value_type) * distance);
+				std::memmove(pos.getPointer(), pos.getPointer() + 1, sizeof(value_type) * distance);
 				return pos;
 			}
 

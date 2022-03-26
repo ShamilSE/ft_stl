@@ -1,6 +1,8 @@
 #pragma once
 
-#include "ft.hpp"
+#include <iostream>
+
+#include "ft.h"
 
 enum Compare
 {

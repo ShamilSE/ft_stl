@@ -1,5 +1,5 @@
-#include "../map.h"
-#include "../vector.hpp"
+#include "map.h"
+#include "vector.h"
 #include <string>
 #include <vector>
 #include <map>
