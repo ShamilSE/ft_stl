@@ -3,19 +3,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iostream>
 
-void iterator_test_origin() {
-
-}
 
 int main() {
-    ft::map<int, ft::vector<std::string>> m;
-
-    // std::cout << m.size() << std::endl;
-
-	iterator_test_origin();
-
-	auto a = ft::make_pair("hello", 22);
-	std::cout << a.first << std::endl;
-	std::cout << a.second << std::endl;
+    std::cout << "main for map" << std::endl;
+    ft::map<int, int> a;
+    a.insert(5);
+    return 0;
 }

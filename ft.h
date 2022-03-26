@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <iostream>
+
 namespace ft {
 
 template<class Category, class T>
@@ -16,14 +19,41 @@ typedef size_t size_type;
 
 bool is_integral();
 
-template<typename T, typename Allocator = std::allocator<T> >
-class vector;
-
 //enable_if
 template<bool B, class T = void>
 struct    enable_if {};
 
 template<class T>
 struct    enable_if<true, T> { typedef T type; };
+
+//pair
+template<typename T1, typename T2>
+struct pair
+{
+    T1 first;
+    T2 second;
+
+    pair(T1 f, T2 s): first(f), second(s)
+    {
+        std::cout << "pair constructor called" << "\n";
+        std::cout << "first value: " << first << "\n";
+        std::cout << "second value: " << second << "\n";
+        //DEBUG_LOG("pair constructor called");
+    }
+};
+
+template<typename T1, typename T2>
+pair<T1, T2> make_pair(T1 first, T2 second)
+{
+    return pair<T1, T2> (first, second);
+}
+
+//container headers
+    template<typename T, typename Allocator = std::allocator<T> >
+    class vector;
+
+    template<typename Key, typename Tp, typename Compare = std::less<Key>,
+            typename Allocator = std::allocator<ft::pair<const Key, Tp> > >
+    class map;
 
 }
