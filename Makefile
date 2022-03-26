@@ -1,34 +1,51 @@
 NAME = containers
 
-UTILS_LIB = utils/libutils.a
-UTILS_SRC = utils/libutils.c
-UTILS_O = utils/libutils.o
+SRCS_VECTOR = vector_test.cpp
+SRCS_STACK = stack_test.cpp
+SRCS_MAP = map_test.cpp
 
-VECTOR_TEST = tests/vector_test.cpp
+VECTOR_DEP = ft.h map.h
+STACK_DEP = ft.h map.h
+MAP_DEP = ft.h map.h
 
-SRC = main.cpp
-#INC = vector.hpp SomeClass.hpp map.hpp stack.hpp
-CFLAGS = -Wall -Wextra -Werror -std=c++98
+VECTOR = vector
+STACK = stack
+MAP = map
 
-all: $(NAME)
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 
-make_lib:
-	gcc -g -c $(UTILS_SRC) -o $(UTILS_O)
-	ar rc $(UTILS_LIB) $(UTILS_O)
-	ranlib $(UTILS_LIB)
+OBJS_DIR =   .obj
 
-$(NAME): make_lib $(SRC) $(UTC)
-	clang++ $(CFLAGS) $(SRC) $(VECTOR_TEST) -c
-	clang++ main.o vector_test.o -L utils -lutils -o $(NAME)
+OBJS_VECTOR =   $(addprefix $(OBJS_DIR)/, $(patsubst %.cpp, %.o, $(SRCS_VECTOR)))
+OBJS_STACK	=	$(addprefix $(OBJS_DIR)/, $(patsubst %.cpp, %.o, $(SRCS_STACK)))
+OBJS_MAP	=	$(addprefix $(OBJS_DIR)/, $(patsubst %.cpp, %.o, $(SRCS_MAP)))
+
+all: all_vector all_stack all_map
+
+all_vector: $(VECTOR)
+all_stack: $(STACK)
+all_map: $(MAP)
+
+$(VECTOR): $(OBJS_VECTOR)
+	clang++ $(CFLAGS) $(OBJS_VECTOR) -o $(VECTOR)
+
+$(STACK): $(OBJS_STACK)
+	clang++ $(CFLAGS) $(OBJS_STACK) -o $(STACK)
+
+$(MAP): $(OBJS_MAP)
+	clang++ $(CFLAGS) $(OBJS_MAP) -o $(MAP)
+
+$(OBJS_DIR)/%.o:   %.cpp ft.h
+	test -d $(OBJS_DIR) || mkdir $(OBJS_DIR)
+	clang++ $(CFLAGS) -c $< -o $@
 
 clean:
-	rm $(UTILS_O)
-	rm *.o
+	rm -rf $(OBJS_VECTOR) $(OBJS_STACK) $(OBJS_MAP)
 
 fclean: clean
-	rm $(NAME)
-	rm $(UTILS_LIB)
+	rm -rf $(VECTOR) $(STACK) $(MAP)
 
 re: fclean all
 
 .PHONY: all fclean re
+.PHONY: SRCS NAME HEADER CC CFLAGS OBJS_DIR OBJS
