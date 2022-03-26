@@ -1,4 +1,4 @@
-#include "../stack.hpp"
+#include "../stack.h"
 #include <stack>
 #include <iostream>
 
@@ -24,7 +24,7 @@ void copy_constructor_test_my() {
 	std::cout << a.size() << std::endl;
 }
 
-void stack_test() {
+int main() {
 	// insert_test_my();
 
 	copy_constructor_test_my();

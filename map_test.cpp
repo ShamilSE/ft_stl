@@ -1,4 +1,4 @@
-#include "../map.hpp"
+#include "../map.h"
 #include "../vector.hpp"
 #include <string>
 #include <vector>
@@ -8,7 +8,7 @@ void iterator_test_origin() {
 
 }
 
-void map_test() {
+int main() {
     ft::map<int, ft::vector<std::string>> m;
 
     // std::cout << m.size() << std::endl;

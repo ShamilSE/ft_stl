@@ -239,7 +239,7 @@ void enable_if_check()
     }
 }
 
-void vector_test() {
+int main() {
 	/*
 	pop_back_my();
 
