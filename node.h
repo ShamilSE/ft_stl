@@ -13,9 +13,11 @@ public:
     node(){
 
     }
-    node(ft::pair<T1, T2> b): pair(b), is_last(true) {
+    node(ft::pair<T1, T2>* pair) {
         l = nullptr;
         r = nullptr;
+        is_last = true;
+        this->pair = pair;
         std::cout << "node created" << std::endl;
     }
 };

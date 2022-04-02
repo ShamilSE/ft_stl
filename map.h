@@ -32,7 +32,7 @@ namespace ft {
         {
             std::cout << "insert new value " << val << std::endl;
             ft::pair<Key, Tp>* new_pair = ft::make_pair(1, val, _allocator);
-            _tree.insert(new_pair);
+            _tree->insert(new_pair);
             return *new_pair;
         }
 

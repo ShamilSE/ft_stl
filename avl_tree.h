@@ -23,13 +23,13 @@ public:
         std::cout << "avl constructor 2" << std::endl;
     }
 
-    void insert(ft::pair<T1, T2> new_pair)
+    void insert(ft::pair<T1, T2>* new_pair)
     {
         if (head == nullptr) {
-            head = node<T1, T2>(new_pair);
+            head = new node<T1, T2>(new_pair);
         }
         else {
-            comparator(head->pair->first, new_pair.first);
+            comparator(head->pair->first, new_pair->first);
         }
     }
 
