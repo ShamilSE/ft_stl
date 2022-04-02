@@ -16,13 +16,36 @@ public:
 
     void insert(ft::pair<T1, T2>& new_pair)
     {
+        bool toLeftSide = false;
+        bool elInserted = false;
         if (head == nullptr) {
             head = new node<T1, T2>(new_pair);
+            return;
         }
-        else {
-            const bool side = comparator(head->pair->first, new_pair.first);
-            std::cout << "avl tree insert " << new_pair.second << std::endl;
-            std::cout << "side is " << side << std::endl;
+
+        node<T1, T2>* currentNode = head;
+        while (!elInserted) {
+            toLeftSide = comparator(new_pair.first, currentNode->pair->first);
+            if (toLeftSide) {
+                if (currentNode->l == nullptr) {
+                    currentNode->l = new node<T1, T2>(new_pair);
+                    currentNode->l->parent = currentNode;
+                    elInserted = true;
+                }
+                else {
+                    currentNode = currentNode->l;
+                }
+            }
+            else {
+                if (currentNode->r == nullptr) {
+                    currentNode->r = new node<T1, T2>(new_pair);
+                    currentNode->r->parent = currentNode;
+                    elInserted = true;
+                }
+                else {
+                    currentNode = currentNode->r;
+                }
+            }
         }
     }
 
