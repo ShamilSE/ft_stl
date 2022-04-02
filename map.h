@@ -11,37 +11,35 @@ namespace ft {
     class map
     {
     public:
-        typedef Key     key_type;
-        typedef Tp      value_type;
-        typedef Compare key_compare;
-        avl_tree<key_type, value_type, key_compare, Allocator>* _tree;
+        avl_tree<Key, Tp, Compare, Allocator>* _tree;
     private:
-        Allocator                               _allocator;
-        static key_compare                      _comparator;
+        Allocator       _allocator;
+        static Compare  _comparator;
 
     public:
-        map(const key_compare& comp = key_compare(), Allocator allocator = Allocator())
+        map(const Compare& comp = Compare(), Allocator allocator = Allocator())
         {
+            //_comparator = comp;
+            //_allocator = allocator;
             (void)comp;
-            _allocator = allocator;
+            (void)allocator;
             _tree = new avl_tree<Key, Tp, Compare, Allocator>;
             std::cout << "constructor for empty map" << std::endl;
         }
 
-        ft::pair<key_type, value_type> insert(const value_type& val)
+
+        ft::pair<Key, Tp> insert(ft::pair<Key, Tp>& new_pair)
         {
-            std::cout << "insert new value " << val << std::endl;
-            ft::pair<Key, Tp>* new_pair = ft::make_pair(1, val, _allocator);
+            std::cout << "insert new value " << new_pair.second << std::endl;
             _tree->insert(new_pair);
-            return *new_pair;
+            return new_pair;
         }
 
         class iterator {
             //итератор должен хранить поинтер на текущий элемент
-            iterator(avl_tree<key_type, value_type , key_compare, Allocator> tree, key_compare comp = _comparator)
+            iterator(avl_tree<Key, Tp , Compare, Allocator> tree)
             {
-                node<key_type, value_type> & head = tree.getHeadNode();
-                // должна быть отдельный функционал для сравнения key_value двух нод
+                node<Key, Tp> & head = tree.getHeadNode();
                 comp(head.pair.second, head.l->pair);
             }
         };

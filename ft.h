@@ -42,13 +42,11 @@ struct pair
     }
 };
 
-template<typename T1, typename T2, typename Allocator>
-pair<T1, T2>* make_pair(T1 first, T2 second, Allocator allocator)
+template<typename T1, typename T2>
+pair<T1, T2>& make_pair(T1 first, T2 second)
 {
-    ft::pair<T1, T2>* new_pair;
-    new_pair = allocator.allocate(1);
-    allocator.construct(new_pair, pair<T1, T2>(first, second));
-    return new_pair;
+    ft::pair<T1, T2>* new_pair = new pair<T1, T2>(first, second);
+    return *new_pair;
 }
 
 //container headers
