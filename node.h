@@ -8,10 +8,14 @@ public:
     node* l;
     node* r;
     bool is_last;
+    ft::pair<T1, T2>* pair;
 
-    ft::pair<T1, T2> pair;
-    node(): pair(ft::make_pair(0, 0)), is_last(true) {}
+    node(){
+
+    }
     node(ft::pair<T1, T2> b): pair(b), is_last(true) {
+        l = nullptr;
+        r = nullptr;
         std::cout << "node created" << std::endl;
     }
 };

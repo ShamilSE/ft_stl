@@ -42,10 +42,13 @@ struct pair
     }
 };
 
-template<typename T1, typename T2>
-pair<T1, T2> make_pair(T1 first, T2 second)
+template<typename T1, typename T2, typename Allocator>
+pair<T1, T2>* make_pair(T1 first, T2 second, Allocator allocator)
 {
-    return pair<T1, T2> (first, second);
+    ft::pair<T1, T2>* new_pair;
+    new_pair = allocator.allocate(1);
+    allocator.construct(new_pair, pair<T1, T2>(first, second));
+    return new_pair;
 }
 
 //container headers
@@ -53,7 +56,7 @@ pair<T1, T2> make_pair(T1 first, T2 second)
     class vector;
 
     template<typename Key, typename Tp, typename Compare = std::less<Key>,
-            typename Allocator = std::allocator<ft::pair<const Key, Tp> > >
+            typename Allocator = std::allocator<ft::pair<Key, Tp> > >
     class map;
 
 }

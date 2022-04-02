@@ -10,5 +10,6 @@ int main() {
     std::cout << "main for map" << std::endl;
     ft::map<int, int> a;
     a.insert(5);
+    a.insert(5);
     return 0;
 }
