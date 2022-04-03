@@ -49,6 +49,45 @@ public:
         }
     }
 
+    node<T1, T2>* prevEl(node<T1, T2>* comparable)
+    {
+        node<T1, T2>* currentNode = comparable;
+        bool madeStepLeft = false;
+
+        if (currentNode == nullptr) {
+            return tail;
+        }
+
+        while (true)
+        {
+            if (currentNode->l != nullptr && !madeStepLeft) {
+                if (!comparator(currentNode->pair->first, currentNode->l->pair->first)) {
+                    currentNode = currentNode->l;
+                    madeStepLeft = true;
+                    if (currentNode->r == nullptr) {
+                        return currentNode;
+                    }
+                }
+            }
+            else if (currentNode->r != nullptr && madeStepLeft) {
+                if (comparator(currentNode->pair->first, currentNode->r->pair->first)) {
+                    currentNode = currentNode->r;
+                }
+                else return currentNode;
+            }
+            else if (!madeStepLeft) {
+                if (
+                        currentNode->parent != nullptr &&
+                        !comparator(currentNode->pair->first, currentNode->parent->pair->first)
+                        )
+                {
+                    return currentNode->parent;
+                }
+                else return tail;
+            }
+        }
+    }
+
     node<T1, T2>* nextEl(node<T1, T2>* comparable)
     {
         node<T1, T2>* currentNode = comparable;
@@ -77,15 +116,14 @@ public:
             }
             else if (!madeStepRight) {
                 if (
-                        currentNode->parent != nullptr
-                        && comparator(currentNode->pair->first, currentNode->parent->pair->first)
+                        currentNode->parent != nullptr &&
+                        comparator(currentNode->pair->first, currentNode->parent->pair->first)
                     )
                 {
                         return currentNode->parent;
                 }
                 else return tail;
-            }
-            else return currentNode;
+            } else return currentNode;
         }
     }
 

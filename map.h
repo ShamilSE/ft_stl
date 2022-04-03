@@ -12,16 +12,16 @@ namespace ft {
     {
     public:
         avl_tree<Key, Tp, Compare, Allocator>* _tree;
+        avl_tree<Key, Tp, Compare, Allocator>* getTree() { return _tree; }
     private:
         Allocator       _allocator;
-        const Compare  _comparator;
 
-        avl_tree<Key, Tp, Compare, Allocator>* getTree() { return _tree; }
+        const Compare  _comparator;
 
         //TODO: [] operator overloading
 
     public:
-        map(const Compare& comp = Compare(), Allocator allocator = Allocator())
+        explicit map(const Compare& comp = Compare(), Allocator allocator = Allocator())
             : _tree(new avl_tree<Key, Tp, Compare, Allocator>), _allocator(allocator), _comparator(comp)
         {}
 
@@ -35,7 +35,7 @@ namespace ft {
             avl_tree<Key, Tp, Compare, Allocator>* _tree;
             node<Key, Tp>* currentNode;
 
-            iterator(avl_tree<Key, Tp, Compare, Allocator>* tree)
+            explicit iterator(avl_tree<Key, Tp, Compare, Allocator>* tree)
             : _tree(tree), currentNode(_tree->getHeadNode())
             {}
 
@@ -44,14 +44,52 @@ namespace ft {
                 return *this;
             }
 
-            //TODO: ++ operator overloding
-            //TODO: operator ++ overloding
-            //TODO: -- operator overloding
-            //TODO: operator -- overloding
+            iterator operator++ () {
+                currentNode = _tree->nextEl(currentNode);
+                return *this;
+            }
+
+            iterator operator-- (int) {
+                currentNode = _tree->prevEl(currentNode);
+                return *this;
+            }
+
+            iterator operator-- () {
+                currentNode = _tree->prevEl(currentNode);
+                return *this;
+            }
+
+            bool operator== (const iterator& other) {
+                return this->currentNode == other.currentNode;
+            }
+
+            bool operator!= (const iterator& other) {
+                return this->currentNode != other.currentNode;
+            }
+
+            bool operator> (const iterator& other) {
+                return this->currentNode > other.currentNode;
+            }
+
+            bool operator< (const iterator& other) {
+                return this->currentNode < other.currentNode;
+            }
+
+            bool operator>= (const iterator& other) {
+                return this->currentNode >= other.currentNode;
+            }
+
+            bool operator<= (const iterator& other) {
+                return this->currentNode <= other.currentNode;
+            }
+
+            Tp operator* () {
+                return currentNode->pair->second;
+            }
         };
 
         iterator begin() { return iterator(getTree()); }
-        iterator end() { return iterator(_tree->getTailNode()); }
+        // TODO: iterator end() {};
 
     };// class map
 
