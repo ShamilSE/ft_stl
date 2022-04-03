@@ -35,10 +35,7 @@ struct pair
 
     pair(T1 f, T2 s): first(f), second(s)
     {
-        std::cout << "pair constructor called" << "\n";
-        std::cout << "first value: " << first << "\n";
-        std::cout << "second value: " << second << "\n";
-        //DEBUG_LOG("pair constructor called");
+
     }
 };
 

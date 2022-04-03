@@ -14,35 +14,45 @@ namespace ft {
         avl_tree<Key, Tp, Compare, Allocator>* _tree;
     private:
         Allocator       _allocator;
-        static Compare  _comparator;
+        const Compare  _comparator;
+
+        avl_tree<Key, Tp, Compare, Allocator>* getTree() { return _tree; }
+
+        //TODO: [] operator overloading
 
     public:
         map(const Compare& comp = Compare(), Allocator allocator = Allocator())
-        {
-            //_comparator = comp;
-            //_allocator = allocator;
-            (void)comp;
-            (void)allocator;
-            _tree = new avl_tree<Key, Tp, Compare, Allocator>;
-            std::cout << "constructor for empty map" << std::endl;
-        }
-
+            : _tree(new avl_tree<Key, Tp, Compare, Allocator>), _allocator(allocator), _comparator(comp)
+        {}
 
         ft::pair<Key, Tp> insert(ft::pair<Key, Tp>& new_pair)
         {
-            std::cout << "insert new value " << new_pair.second << std::endl;
             _tree->insert(new_pair);
             return new_pair;
         }
 
-        class iterator {
-            //итератор должен хранить поинтер на текущий элемент
-            iterator(avl_tree<Key, Tp , Compare, Allocator> tree)
-            {
-                node<Key, Tp> & head = tree.getHeadNode();
-                comp(head.pair.second, head.l->pair);
+        struct iterator {
+            avl_tree<Key, Tp, Compare, Allocator>* _tree;
+            node<Key, Tp>* currentNode;
+
+            iterator(avl_tree<Key, Tp, Compare, Allocator>* tree)
+            : _tree(tree), currentNode(_tree->getHeadNode())
+            {}
+
+            iterator operator++ (int) {
+                currentNode = _tree->nextEl(currentNode);
+                return *this;
             }
+
+            //TODO: ++ operator overloding
+            //TODO: operator ++ overloding
+            //TODO: -- operator overloding
+            //TODO: operator -- overloding
         };
+
+        iterator begin() { return iterator(getTree()); }
+        iterator end() { return iterator(_tree->getTailNode()); }
+
     };// class map
 
 

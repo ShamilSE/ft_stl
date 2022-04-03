@@ -11,13 +11,16 @@ public:
     ft::pair<T1, T2>* pair;
 
     node(){
-
+        parent = nullptr;
+        l = nullptr;
+        r  = nullptr;
+        pair = nullptr;
     }
+
     node(ft::pair<T1, T2>& pair) {
         parent = nullptr;
         l = nullptr;
         r = nullptr;
         this->pair = &pair;
-        std::cout << "node created" << std::endl;
     }
 };
