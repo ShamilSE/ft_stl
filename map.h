@@ -15,22 +15,29 @@ namespace ft {
         avl_tree<Key, Tp, Compare, Allocator>* getTree() { return _tree; }
     private:
         Allocator       _allocator;
-
         const Compare  _comparator;
+        size_t _size;
 
         //TODO: [] operator overloading
         // begin() must return minimal element (not head)
 
     public:
         explicit map(const Compare& comp = Compare(), Allocator allocator = Allocator())
-            : _tree(new avl_tree<Key, Tp, Compare, Allocator>), _allocator(allocator), _comparator(comp)
+            : _tree(new avl_tree<Key, Tp, Compare, Allocator>),
+            _allocator(allocator),
+            _comparator(comp),
+            _size(0)
         {}
 
         ft::pair<Key, Tp> insert(ft::pair<Key, Tp>& new_pair)
         {
             _tree->insert(new_pair);
+            _size++;
             return new_pair;
         }
+
+        size_t size() const { return _size; }
+        bool empty() const { return _size == 0; }
 
         struct iterator {
             avl_tree<Key, Tp, Compare, Allocator>* _tree;
