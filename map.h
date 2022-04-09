@@ -19,6 +19,7 @@ namespace ft {
         const Compare  _comparator;
 
         //TODO: [] operator overloading
+        // begin() must return minimal element (not head)
 
     public:
         explicit map(const Compare& comp = Compare(), Allocator allocator = Allocator())
@@ -35,10 +36,18 @@ namespace ft {
             avl_tree<Key, Tp, Compare, Allocator>* _tree;
             node<Key, Tp>* currentNode;
 
-            explicit iterator(avl_tree<Key, Tp, Compare, Allocator>* tree)
-            : _tree(tree), currentNode(_tree->getHeadNode())
-            {}
+            explicit iterator(avl_tree<Key, Tp, Compare, Allocator>* tree, bool isEnd = false)
+            : _tree(tree), isEnd(isEnd)
+            {
+                if (isEnd == false) {
+                    currentNode = _tree->getFirstNode();
+                }
+                else {
+                    currentNode = _tree->getTailNode();
+                }
+            }
 
+        public:
             iterator operator++ (int) {
                 currentNode = _tree->nextEl(currentNode);
                 return *this;
@@ -86,10 +95,13 @@ namespace ft {
             Tp operator* () {
                 return currentNode->pair->second;
             }
+
+            bool isEnd;
         };
 
+
         iterator begin() { return iterator(getTree()); }
-        // TODO: iterator end() {};
+        iterator end() { return iterator(_tree, true); };
 
     };// class map
 

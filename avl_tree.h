@@ -8,18 +8,38 @@ private:
     node<T1, T2>*   head;
     node<T1, T2>*   tail;
     Comp            comparator;
+
+    node<T1, T2>* createTailNode()
+    {
+        node<T1, T2>* tailNode = new node<T1, T2>(tail, true);
+        return tailNode;
+    }
+
 public:
     avl_tree()
     {
         head = nullptr;
-        tail = new node<T1, T2>;
+        tail = createTailNode();
+    }
+
+    node<T1, T2>* getFirstNode() {
+        node<T1, T2>* currentNode = head;
+
+        if (currentNode->l == tail) {
+            return head;
+        }
+
+        while (currentNode->l != tail) {
+            currentNode = prevEl(currentNode);
+        }
+        return currentNode;
     }
 
     void insert(ft::pair<T1, T2>& new_pair)
     {
         bool elInserted = false;
         if (head == nullptr) {
-            head = new node<T1, T2>(new_pair);
+            head = new node<T1, T2>(new_pair, tail);
             return;
         }
 
@@ -27,8 +47,8 @@ public:
         while (!elInserted) {
             bool toLeftSide = comparator(new_pair.first, currentNode->pair->first);
             if (toLeftSide) {
-                if (currentNode->l == nullptr) {
-                    currentNode->l = new node<T1, T2>(new_pair);
+                if (currentNode->l == tail) {
+                    currentNode->l = new node<T1, T2>(new_pair, tail);
                     currentNode->l->parent = currentNode;
                     elInserted = true;
                 }
@@ -37,8 +57,8 @@ public:
                 }
             }
             else {
-                if (currentNode->r == nullptr) {
-                    currentNode->r = new node<T1, T2>(new_pair);
+                if (currentNode->r == tail) {
+                    currentNode->r = new node<T1, T2>(new_pair, tail);
                     currentNode->r->parent = currentNode;
                     elInserted = true;
                 }
@@ -60,16 +80,16 @@ public:
 
         while (true)
         {
-            if (currentNode->l != nullptr && !madeStepLeft) {
+            if (currentNode->l != tail && !madeStepLeft) {
                 if (!comparator(currentNode->pair->first, currentNode->l->pair->first)) {
                     currentNode = currentNode->l;
                     madeStepLeft = true;
-                    if (currentNode->r == nullptr) {
+                    if (currentNode->r == tail) {
                         return currentNode;
                     }
                 }
             }
-            else if (currentNode->r != nullptr && madeStepLeft) {
+            else if (currentNode->r != tail && madeStepLeft) {
                 if (comparator(currentNode->pair->first, currentNode->r->pair->first)) {
                     currentNode = currentNode->r;
                 }
@@ -99,16 +119,16 @@ public:
 
         while (true)
         {
-            if (currentNode->r != nullptr && !madeStepRight) {
+            if (currentNode->r != tail && !madeStepRight) {
                 if (comparator(currentNode->pair->first, currentNode->r->pair->first)) {
                     currentNode = currentNode->r;
                     madeStepRight = true;
-                    if (currentNode->l == nullptr) {
+                    if (currentNode->l == tail) {
                         return currentNode;
                     }
                 }
             }
-            else if (currentNode->l != nullptr && madeStepRight) {
+            else if (currentNode->l != tail && madeStepRight) {
                 if (!comparator(currentNode->pair->first, currentNode->l->pair->first)) {
                     currentNode = currentNode->l;
                 }

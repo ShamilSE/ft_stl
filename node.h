@@ -5,22 +5,25 @@
 template<typename T1, typename T2>
 struct node {
 public:
+    bool isTail;
     node* parent;
     node* l;
     node* r;
     ft::pair<T1, T2>* pair;
 
-    node(){
+    node(node* tailNode, bool isTail = false){
         parent = nullptr;
-        l = nullptr;
-        r  = nullptr;
+        l = tailNode;
+        r  = tailNode;
         pair = nullptr;
+        this->isTail = isTail;
     }
 
-    node(ft::pair<T1, T2>& pair) {
+    node(ft::pair<T1, T2>& pair, node* tailNode, bool isTail = false) {
         parent = nullptr;
-        l = nullptr;
-        r = nullptr;
+        l = tailNode;
+        r = tailNode;
         this->pair = &pair;
+        this->isTail = isTail;
     }
 };
