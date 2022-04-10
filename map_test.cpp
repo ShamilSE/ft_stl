@@ -34,7 +34,27 @@ bool iteratorTest_2() {
     return true;
 }
 
+bool findMethod() {
+    ft::map<int, int> my_map;
+
+    my_map.insert(ft::make_pair(1, 5));
+    my_map.insert(ft::make_pair(2, 6));
+    my_map.insert(ft::make_pair(3, 7));
+    my_map.insert(ft::make_pair(4, 8));
+
+    ft::map<int, int>::iterator it = my_map.find(4);
+    std::cout << *it << std::endl;
+    it = my_map.find(1);
+    std::cout << *it << std::endl;
+    it = my_map.find(2);
+    std::cout << *it << std::endl;
+    it = my_map.find(3);
+    std::cout << *it << std::endl;
+    return true;
+}
+
 int main() {
-    iteratorTest_2();
+    //iteratorTest_2();
+    findMethod();
     return 0;
 }
