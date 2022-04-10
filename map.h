@@ -103,9 +103,49 @@ namespace ft {
                 return currentNode->pair->second;
             }
 
+            void setCurrentNode(node<Key, Tp>* node) { this->currentNode = node; }
+
             bool isEnd;
         };
 
+        iterator find(const Key& key)
+        {
+            node<Key, Tp> *currentNode;
+            if (_size == 0) {
+                currentNode = _tree->getTailNode();
+            }
+            else {
+                currentNode = _tree->getHeadNode();
+            }
+
+            while (true)
+            {
+                if (
+                    (!_comparator(currentNode->pair->first, key) && !_comparator(key, currentNode->pair->first))
+                    ||
+                    (currentNode == _tree->getTailNode())
+                   )
+                {
+                    iterator it = iterator(_tree);
+                    it.setCurrentNode(currentNode);
+                    return it;
+                }
+                else if (!_comparator(currentNode->pair->first, key))
+                {
+                    currentNode = _tree->prevEl(currentNode);
+                }
+                else
+                {
+                    currentNode = _tree->nextEl(currentNode);
+                }
+            }
+        }
+
+        void erase([[maybe_unused]] iterator pos)
+        {
+
+            _size--;
+        }
 
         iterator begin() { return iterator(getTree()); }
         iterator end() { return iterator(_tree, true); };
