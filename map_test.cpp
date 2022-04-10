@@ -53,8 +53,24 @@ bool findMethod() {
     return true;
 }
 
+bool eraseMethod() {
+    ft::map<int, int> my_map;
+
+    my_map.insert(ft::make_pair(1, 5));
+    my_map.insert(ft::make_pair(2, 6));
+    my_map.insert(ft::make_pair(3, 7));
+    my_map.insert(ft::make_pair(4, 8));
+
+    ft::map<int, int>::iterator it = my_map.begin();
+    it++;
+    my_map.erase(it);
+
+    return false;
+}
+
 int main() {
     //iteratorTest_2();
-    findMethod();
+    //findMethod();
+    eraseMethod();
     return 0;
 }

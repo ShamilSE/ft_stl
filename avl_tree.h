@@ -22,6 +22,29 @@ public:
         tail = createTailNode();
     }
 
+    node<T1, T2>* findReplacement(node<T1, T2>* nodeToDelete)
+    {
+        node<T1, T2>* currentNode = tail;
+        if (nodeToDelete->l != tail)
+        {
+            currentNode = nodeToDelete->l;
+            while (currentNode->r != tail)
+            {
+                currentNode = currentNode->r;
+            }
+        }
+        else if (nodeToDelete->r != tail)
+        {
+            currentNode = nodeToDelete->r;
+            while (currentNode->l != tail)
+            {
+                currentNode = currentNode->l;
+            }
+        }
+
+        return currentNode;
+    }
+
     node<T1, T2>* getFirstNode() {
         node<T1, T2>* currentNode = head;
 

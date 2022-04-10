@@ -108,6 +108,15 @@ namespace ft {
             bool isEnd;
         };
 
+    private:
+        bool isKeysEqual(const Key& firstKey, const Key& secondKey)
+        {
+            return !_comparator(firstKey, secondKey)
+                && !_comparator(secondKey, firstKey);
+        }
+
+    public:
+
         iterator find(const Key& key)
         {
             node<Key, Tp> *currentNode;
@@ -121,7 +130,7 @@ namespace ft {
             while (true)
             {
                 if (
-                    (!_comparator(currentNode->pair->first, key) && !_comparator(key, currentNode->pair->first))
+                    (isKeysEqual(currentNode->pair->first, key))
                     ||
                     (currentNode == _tree->getTailNode())
                    )
@@ -141,9 +150,75 @@ namespace ft {
             }
         }
 
-        void erase([[maybe_unused]] iterator pos)
+        void erase(iterator pos)
         {
+            node<Key, Tp>* currentNode = find(pos.currentNode->pair->first).currentNode;
 
+            if (currentNode == _tree->getTailNode()) {
+                return ;
+            }
+
+            node<Key, Tp>* replacement = _tree->findReplacement(pos.currentNode);
+            if (replacement == _tree->getTailNode())
+            {
+                // уничтожить элемент
+                // ссылку у родителя постовить на tail
+                if (currentNode->parent != nullptr)
+                {
+                    if (
+                        currentNode->parent->l != _tree->getTailNode() &&
+                        isKeysEqual(currentNode->parent->l->pair->first, currentNode->pair->first)
+                       )
+                    {
+                       currentNode->parent->l = _tree->getTailNode();
+                    }
+                    else
+                    {
+                        currentNode->parent->r = _tree->getTailNode();
+                    }
+                }
+                pos.currentNode->~node();
+                _size--;
+                return ;
+            }
+
+            if (isKeysEqual(replacement->parent->r->pair->first, currentNode->pair->first))
+            {
+                if (currentNode->l != _tree->getTailNode())
+                {
+                    replacement->parent->r = currentNode->l;
+                }
+            }
+            else
+            {
+                if (currentNode->r != _tree->getTailNode())
+                {
+                    replacement->parent->l = currentNode->r;
+                }
+            }
+
+            // replace parent
+            if (currentNode->parent != nullptr)
+            {
+                replacement->parent = currentNode->parent;
+                if (
+                        currentNode->parent->r != _tree->getTailNode() &&
+                        isKeysEqual(currentNode->parent->r->pair->first, currentNode->pair->first)
+                   )
+                {
+                    replacement->parent->r = replacement;
+                }
+                else
+                {
+                    replacement->parent->l = replacement;
+                }
+            }
+            //
+
+            replacement->l = currentNode->l;
+            replacement->r = currentNode->r;
+
+            pos.currentNode->~node();
             _size--;
         }
 
