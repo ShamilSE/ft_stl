@@ -2,6 +2,15 @@
 #include "map.h"
 #include <iostream>
 
+template <typename Key, typename Value>
+void printMap(ft::map<Key, Value>& my_map)
+{
+    for (auto it = my_map.begin(); it != my_map.end(); it++)
+    {
+        std::cout << *it << std::endl;
+    }
+}
+
 bool iteratorTest() {
     ft::map<int, int> a;
     a.insert(ft::make_pair(1, 5));
@@ -61,10 +70,13 @@ bool eraseMethod() {
     my_map.insert(ft::make_pair(3, 7));
     my_map.insert(ft::make_pair(4, 8));
 
+    std::cout << "print map first time" << std::endl;
+    printMap(my_map);
     ft::map<int, int>::iterator it = my_map.begin();
     it++;
     my_map.erase(it);
-
+    std::cout << "print map second time" << std::endl;
+    printMap(my_map);
     return false;
 }
 
