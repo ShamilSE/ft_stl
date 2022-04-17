@@ -152,9 +152,9 @@ namespace ft {
 
         void erase(iterator pos)
         {
-            node<Key, Tp>* currentNode = find(pos.currentNode->pair->first).currentNode;
+            node<Key, Tp>* nodeToDelete = find(pos.currentNode->pair->first).currentNode;
 
-            if (currentNode == _tree->getTailNode()) {
+            if (nodeToDelete == _tree->getTailNode()) {
                 return ;
             }
 
@@ -163,18 +163,18 @@ namespace ft {
             {
                 // уничтожить элемент
                 // ссылку у родителя постовить на tail
-                if (currentNode->parent != nullptr)
+                if (nodeToDelete->parent != nullptr)
                 {
                     if (
-                        currentNode->parent->l != _tree->getTailNode() &&
-                        isKeysEqual(currentNode->parent->l->pair->first, currentNode->pair->first)
+                        nodeToDelete->parent->l != _tree->getTailNode() &&
+                        isKeysEqual(nodeToDelete->parent->l->pair->first, nodeToDelete->pair->first)
                        )
                     {
-                       currentNode->parent->l = _tree->getTailNode();
+                        nodeToDelete->parent->l = _tree->getTailNode();
                     }
                     else
                     {
-                        currentNode->parent->r = _tree->getTailNode();
+                        nodeToDelete->parent->r = _tree->getTailNode();
                     }
                 }
                 pos.currentNode->~node();
@@ -182,41 +182,20 @@ namespace ft {
                 return ;
             }
 
-            if (isKeysEqual(replacement->parent->r->pair->first, currentNode->pair->first))
+            if (nodeToDelete->parent != nullptr)
             {
-                if (currentNode->l != _tree->getTailNode())
+                // if nodeToDelete is right (position) child
+                if (isKeysEqual(nodeToDelete->parent->r->pair->first, nodeToDelete->pair->first))
                 {
-                    replacement->parent->r = currentNode->l;
-                }
-            }
-            else
-            {
-                if (currentNode->r != _tree->getTailNode())
-                {
-                    replacement->parent->l = currentNode->r;
-                }
-            }
-
-            // replace parent
-            if (currentNode->parent != nullptr)
-            {
-                replacement->parent = currentNode->parent;
-                if (
-                        currentNode->parent->r != _tree->getTailNode() &&
-                        isKeysEqual(currentNode->parent->r->pair->first, currentNode->pair->first)
-                   )
-                {
-                    replacement->parent->r = replacement;
+                    nodeToDelete->parent->r = replacement;
+                    replacement->parent = nodeToDelete->parent;
                 }
                 else
                 {
-                    replacement->parent->l = replacement;
+                    nodeToDelete->parent->l = replacement;
+                    replacement->parent = nodeToDelete->parent;
                 }
             }
-            //
-
-            replacement->l = currentNode->l;
-            replacement->r = currentNode->r;
 
             pos.currentNode->~node();
             _size--;
