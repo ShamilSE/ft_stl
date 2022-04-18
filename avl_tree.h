@@ -22,9 +22,11 @@ private:
 public:
     avl_tree()
     {
-        head = nullptr;
-        tail = createTailNode();
+        head = createTailNode();
+        tail = head;
     }
+
+    size_t max_size() { return nodeAllocator.max_size(); }
 
     void eraseNode(node<T2, T2>* nodeToErase)
     {
@@ -73,7 +75,7 @@ public:
     void insert(ft::pair<T1, T2>& new_pair)
     {
         bool elInserted = false;
-        if (head == nullptr) {
+        if (head == tail) {
             head = nodeAllocator.allocate(1);
             new(head) node<T1, T2>(new_pair, tail);
             return;
@@ -119,7 +121,7 @@ public:
         node<T1, T2>* currentNode = comparable;
         bool madeStepLeft = false;
 
-        if (currentNode == nullptr) {
+        if (currentNode == tail) {
             return tail;
         }
 
@@ -142,7 +144,7 @@ public:
             }
             else if (!madeStepLeft) {
                 if (
-                        currentNode->parent != nullptr &&
+                        currentNode->parent != tail &&
                         !comparator(currentNode->pair->first, currentNode->parent->pair->first)
                         )
                 {
@@ -158,7 +160,7 @@ public:
         node<T1, T2>* currentNode = comparable;
         bool madeStepRight = false;
 
-        if (currentNode == nullptr) {
+        if (currentNode == tail) {
             return tail;
         }
 
@@ -181,7 +183,7 @@ public:
             }
             else if (!madeStepRight) {
                 if (
-                        currentNode->parent != nullptr &&
+                        currentNode->parent != tail &&
                         comparator(currentNode->pair->first, currentNode->parent->pair->first)
                     )
                 {
@@ -194,4 +196,5 @@ public:
 
     node<T1, T2>* getHeadNode() { return head; }
     node<T1, T2>* getTailNode() { return tail; }
+    void setHeadNode(node<T1, T2>* newHeadNode) {head = newHeadNode;}
 };

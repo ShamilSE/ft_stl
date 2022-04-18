@@ -12,7 +12,7 @@ public:
     ft::pair<T1, T2>* pair;
 
     node(node* tailNode, bool isTail = false){
-        parent = nullptr;
+        parent = tailNode;
         l = tailNode;
         r  = tailNode;
         pair = nullptr;
@@ -20,7 +20,7 @@ public:
     }
 
     node(ft::pair<T1, T2>& pair, node* tailNode, bool isTail = false) {
-        parent = nullptr;
+        parent = tailNode;
         l = tailNode;
         r = tailNode;
         this->pair = &pair;

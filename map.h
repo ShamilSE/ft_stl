@@ -155,6 +155,16 @@ namespace ft {
             }
         }
 
+        size_t max_size() { return _tree->max_size(); }
+
+        void clear()
+        {
+            while (_size != 0)
+            {
+                erase(begin());
+            }
+        }
+
         void erase(iterator pos)
         {
             node<Key, Tp>* nodeToDelete = find(pos.currentNode->pair->first).currentNode;
@@ -166,7 +176,7 @@ namespace ft {
             {
                 // уничтожить элемент
                 // ссылку у родителя постовить на tail
-                if (nodeToDelete->parent != nullptr)
+                if (nodeToDelete->parent != _tree->getTailNode())
                 {
                     if (
                         nodeToDelete->parent->l != _tree->getTailNode() &&
@@ -185,7 +195,7 @@ namespace ft {
                 return ;
             }
 
-            if (nodeToDelete->parent != nullptr)
+            if (nodeToDelete->parent != _tree->getTailNode())
             {
                 // if nodeToDelete is right (position) child
                 if (isKeysEqual(nodeToDelete->parent->r->pair->first, nodeToDelete->pair->first))
@@ -198,10 +208,31 @@ namespace ft {
                     nodeToDelete->parent->l = replacement;
                     replacement->parent = nodeToDelete->parent;
                 }
+                _tree->eraseNode(nodeToDelete);
+                _size--;
             }
 
-            _tree->eraseNode(nodeToDelete);
-            _size--;
+            if (nodeToDelete->parent == _tree->getTailNode())
+            {
+                node<Key, Tp>* tmpHead = _tree->getHeadNode();
+                if (
+                        tmpHead->l != _tree->getTailNode() &&
+                        isKeysEqual(tmpHead->l->pair->first, nodeToDelete->pair->first)
+                   )
+                {
+                    replacement->r = tmpHead->r;
+                    tmpHead->r->parent = replacement;
+                }
+                else
+                {
+                    replacement->l = tmpHead->l;
+                    tmpHead->r->parent = replacement;
+                }
+                _tree->eraseNode(tmpHead);
+                _tree->setHeadNode(replacement);
+                _size--;
+            }
+
         }
 
         iterator begin() { return iterator(getTree()); }
