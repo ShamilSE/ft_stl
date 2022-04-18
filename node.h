@@ -25,5 +25,10 @@ public:
         r = tailNode;
         this->pair = &pair;
         this->isTail = isTail;
+        std::cout << "node constructor called\n\tvalue: " << pair.second << std::endl;
+    }
+
+    ~node() {
+        std::cout << "node destructor called\n\tvalue: " << std::endl;
     }
 };

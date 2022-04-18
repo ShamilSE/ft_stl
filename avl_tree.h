@@ -8,10 +8,13 @@ private:
     node<T1, T2>*   head;
     node<T1, T2>*   tail;
     Comp            comparator;
+    typename Allocator::template rebind<node<T1, T2>>::other nodeAllocator;
 
+    // TODO: resolve providing tailNode to each new one
     node<T1, T2>* createTailNode()
     {
-        node<T1, T2>* tailNode = new node<T1, T2>(tail, true);
+        node<T1, T2>* tailNode = nodeAllocator.allocate(1);
+        new(tailNode) node<T1, T2>(tail, true);
         return tailNode;
     }
 
@@ -62,30 +65,40 @@ public:
     {
         bool elInserted = false;
         if (head == nullptr) {
-            head = new node<T1, T2>(new_pair, tail);
+            head = nodeAllocator.allocate(1);
+            new(head) node<T1, T2>(new_pair, tail);
             return;
         }
 
         node<T1, T2>* currentNode = head;
-        while (!elInserted) {
+        while (!elInserted)
+        {
             bool toLeftSide = comparator(new_pair.first, currentNode->pair->first);
-            if (toLeftSide) {
-                if (currentNode->l == tail) {
-                    currentNode->l = new node<T1, T2>(new_pair, tail);
+            if (toLeftSide)
+            {
+                if (currentNode->l == tail)
+                {
+                    currentNode->l = nodeAllocator.allocate(1);
+                    new(currentNode->l) node<T1, T2>(new_pair, tail);
                     currentNode->l->parent = currentNode;
                     elInserted = true;
                 }
-                else {
+                else
+                {
                     currentNode = currentNode->l;
                 }
             }
-            else {
-                if (currentNode->r == tail) {
-                    currentNode->r = new node<T1, T2>(new_pair, tail);
+            else
+            {
+                if (currentNode->r == tail)
+                {
+                    currentNode->r = nodeAllocator.allocate(1);
+                    new(currentNode->r) node<T1, T2>(new_pair, tail);
                     currentNode->r->parent = currentNode;
                     elInserted = true;
                 }
-                else {
+                else
+                {
                     currentNode = currentNode->r;
                 }
             }

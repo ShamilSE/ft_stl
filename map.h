@@ -18,16 +18,21 @@ namespace ft {
         const Compare  _comparator;
         size_t _size;
 
+
         //TODO: [] operator overloading
         // begin() must return minimal element (not head)
+        // memory allocation using allocator
 
     public:
         explicit map(const Compare& comp = Compare(), Allocator allocator = Allocator())
-            : _tree(new avl_tree<Key, Tp, Compare, Allocator>),
-            _allocator(allocator),
-            _comparator(comp),
-            _size(0)
-        {}
+            : _allocator(allocator),
+              _comparator(comp),
+              _size(0)
+        {
+            typename Allocator::template rebind<avl_tree<Key, Tp, Compare, Allocator>>::other avlTreeAllocator;
+            _tree = avlTreeAllocator.allocate(1);
+            new(_tree) avl_tree<Key, Tp, Compare, Allocator>;
+        }
 
         ft::pair<Key, Tp> insert(ft::pair<Key, Tp>& new_pair)
         {
