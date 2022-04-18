@@ -159,9 +159,7 @@ namespace ft {
         {
             node<Key, Tp>* nodeToDelete = find(pos.currentNode->pair->first).currentNode;
 
-            if (nodeToDelete == _tree->getTailNode()) {
-                return ;
-            }
+            if (nodeToDelete == _tree->getTailNode()) { return ; }
 
             node<Key, Tp>* replacement = _tree->findReplacement(pos.currentNode);
             if (replacement == _tree->getTailNode())
@@ -182,7 +180,7 @@ namespace ft {
                         nodeToDelete->parent->r = _tree->getTailNode();
                     }
                 }
-                pos.currentNode->~node();
+                _tree->eraseNode(nodeToDelete);
                 _size--;
                 return ;
             }
@@ -202,7 +200,7 @@ namespace ft {
                 }
             }
 
-            pos.currentNode->~node();
+            _tree->eraseNode(nodeToDelete);
             _size--;
         }
 
