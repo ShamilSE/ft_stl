@@ -9,6 +9,7 @@ private:
     node<T1, T2>*   tail;
     Comp            comparator;
     typename Allocator::template rebind<node<T1, T2>>::other nodeAllocator;
+    Allocator pairAllocator;
 
     // TODO: resolve providing tailNode to each new one
     node<T1, T2>* createTailNode()
@@ -23,6 +24,14 @@ public:
     {
         head = nullptr;
         tail = createTailNode();
+    }
+
+    void eraseNode(node<T2, T2>* nodeToErase)
+    {
+        pairAllocator.destroy(nodeToErase->pair);
+        nodeAllocator.destroy(nodeToErase);
+        pairAllocator.deallocate(nodeToErase->pair, 1);
+        nodeAllocator.deallocate(nodeToErase, 1);
     }
 
     node<T1, T2>* findReplacement(node<T1, T2>* nodeToDelete)
