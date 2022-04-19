@@ -80,9 +80,40 @@ bool eraseMethod() {
     return false;
 }
 
+bool atMethod()
+{
+    ft::map<int, int>* my_map = new ft::map<int, int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    my_map->insert(ft::make_pair(2,2));
+
+    try
+    {
+        const int key = 1;
+        int a = my_map->at(key);
+        std::cout << "found by at() " << a << std::endl;
+    }
+    catch (std::out_of_range&)
+    {
+        std::cout << "amogus" << std::endl;
+    }
+
+    try
+    {
+        [[maybe_unused]] int a = my_map->at(3);
+    }
+    catch (std::out_of_range&)
+    {
+        std::cout << "amogus" << std::endl;
+    }
+
+    return true;
+}
+
 int main() {
     //iteratorTest_2();
     //findMethod();
-    eraseMethod();
+    //eraseMethod();
+    atMethod();
     return 0;
 }
