@@ -4,6 +4,7 @@
 #include "avl_tree.h"
 #include "node.h"
 #include <iostream>
+#include <stdexcept>
 
 namespace ft {
 
@@ -151,6 +152,7 @@ namespace ft {
                 else
                 {
                     currentNode = _tree->nextEl(currentNode);
+                    if (currentNode == _tree->getTailNode()) return iterator(_tree, true);
                 }
             }
         }
@@ -158,6 +160,14 @@ namespace ft {
         size_t max_size() { return _tree->max_size(); }
 
         Allocator get_allocator() const { return _allocator; }
+
+        Tp& at( const Key& key )
+        {
+            iterator element = find(key);
+            if (element.currentNode == _tree->getTailNode()) throw std::out_of_range("");
+
+            return element.currentNode->pair->second;
+        }
 
         void clear()
         {
