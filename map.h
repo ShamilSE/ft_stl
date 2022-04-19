@@ -157,6 +157,8 @@ namespace ft {
 
         size_t max_size() { return _tree->max_size(); }
 
+        Allocator get_allocator() const { return _allocator; }
+
         void clear()
         {
             while (_size != 0)
