@@ -110,10 +110,22 @@ bool atMethod()
     return true;
 }
 
+bool countMethod()
+{
+    ft::map<int, int>* my_map = new ft::map<int, int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    std::cout << "count() returns " << my_map->count(1) << std::endl;
+    std::cout << "count() returns " << my_map->count(2) << std::endl;
+
+    return true;
+}
+
 int main() {
     //iteratorTest_2();
     //findMethod();
     //eraseMethod();
-    atMethod();
+    //atMethod();
+    countMethod();
     return 0;
 }
