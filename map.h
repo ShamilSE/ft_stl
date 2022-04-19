@@ -169,6 +169,14 @@ namespace ft {
             return element.currentNode->pair->second;
         }
 
+        const Tp& at( const Key& key ) const
+        {
+            iterator element = find(key);
+            if (element.currentNode == _tree->getTailNode()) throw std::out_of_range("");
+
+            return element.currentNode->pair->second;
+        }
+
         void clear()
         {
             while (_size != 0)
