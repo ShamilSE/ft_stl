@@ -115,7 +115,7 @@ namespace ft {
         };
 
     private:
-        bool isKeysEqual(const Key& firstKey, const Key& secondKey)
+        bool isKeysEqual(const Key& firstKey, const Key& secondKey) const
         {
             return !_comparator(firstKey, secondKey)
                 && !_comparator(secondKey, firstKey);
@@ -123,7 +123,7 @@ namespace ft {
 
     public:
 
-        iterator find(const Key& key)
+        iterator find(const Key& key) const
         {
             node<Key, Tp> *currentNode;
             if (_size == 0) {
@@ -175,6 +175,12 @@ namespace ft {
             if (element.currentNode == _tree->getTailNode()) throw std::out_of_range("");
 
             return element.currentNode->pair->second;
+        }
+
+        size_t count( const Key& key ) const
+        {
+            if (find(key).isEnd) return 0;
+            return 1;
         }
 
         void clear()
