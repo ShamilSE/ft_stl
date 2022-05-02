@@ -127,7 +127,8 @@ namespace ft {
         {
             node<Key, Tp> *currentNode;
             if (_size == 0) {
-                currentNode = _tree->getTailNode();
+                iterator it = iterator(_tree, true);
+                return it;
             }
             else {
                 currentNode = _tree->getHeadNode();
@@ -175,6 +176,13 @@ namespace ft {
             if (element.currentNode == _tree->getTailNode()) throw std::out_of_range("");
 
             return element.currentNode->pair->second;
+        }
+
+        Tp& operator[]( const Key& key )
+        {
+            iterator el = find(key);
+            if (el.currentNode != _tree->getTailNode()) return el.currentNode->pair->second;
+            return insert(ft::make_pair(key, Tp())).second;
         }
 
         size_t count( const Key& key ) const

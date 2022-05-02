@@ -30,13 +30,10 @@ struct    enable_if<true, T> { typedef T type; };
 template<typename T1, typename T2>
 struct pair
 {
-    T1 first;
-    T2 second;
+    T1& first;
+    T2& second;
 
-    pair(T1 f, T2 s): first(f), second(s)
-    {
-
-    }
+    pair(T1& f, T2& s): first(f), second(s) {}
 };
 
 template<typename T1, typename T2, typename Allocator = std::allocator<ft::pair<T1, T2>>>
