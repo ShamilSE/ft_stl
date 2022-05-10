@@ -5,7 +5,7 @@
 template <typename Key, typename Value>
 void printMap(ft::map<Key, Value>& my_map)
 {
-    for (auto it = my_map.begin(); it != my_map.end(); it++)
+    for (typename ft::map<Key,Value>::iterator it = my_map.begin(); it != my_map.end(); it++)
     {
         std::cout << *it << std::endl;
     }
@@ -136,12 +136,26 @@ bool insertMethod()
     return true;
 }
 
+bool operatorBracketsMethodTest()
+{
+    ft::map<int,int>* my_map = new ft::map<int,int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    std::cout << my_map->size() << std::endl;
+
+    (*my_map)[2];
+    std::cout << my_map->size() << std::endl;
+
+    return true;
+}
+
 int main() {
-    insertMethod();
     //iteratorTest_2();
     //findMethod();
     //eraseMethod();
     //atMethod();
     //countMethod();
+    insertMethod();
+    operatorBracketsMethodTest();
     return 0;
 }
