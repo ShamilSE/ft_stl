@@ -12,7 +12,7 @@ VECTOR = vector
 STACK = stack
 MAP = map
 
-CFLAGS = -Wall -Wextra -Werror -std=c++11 -g
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -g
 
 OBJS_DIR =   .obj
 
