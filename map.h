@@ -35,13 +35,6 @@ namespace ft {
             new(_tree) avl_tree<Key, Tp, Compare, Allocator>;
         }
 
-        ft::pair<Key, Tp> insert(ft::pair<Key, Tp>& new_pair)
-        {
-            _tree->insert(new_pair);
-            _size++;
-            return new_pair;
-        }
-
         size_t size() const { return _size; }
         bool empty() const { return _size == 0; }
 
@@ -122,6 +115,17 @@ namespace ft {
         }
 
     public:
+
+        ft::pair<bool, iterator> insert(ft::pair<Key, Tp>& new_pair)
+        {
+            bool inserted = _tree->insert(new_pair);
+            iterator it = end();
+            if (inserted) {
+                it = find(new_pair.second);
+                _size++;
+            }
+            return ft::make_pair(inserted, it);
+        }
 
         iterator find(const Key& key) const
         {

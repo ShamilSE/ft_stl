@@ -72,13 +72,13 @@ public:
         return currentNode;
     }
 
-    void insert(ft::pair<T1, T2>& new_pair)
+    bool insert(ft::pair<T1, T2>& new_pair) // TODO: make correct exit status
     {
         bool elInserted = false;
         if (head == tail) {
             head = nodeAllocator.allocate(1);
             new(head) node<T1, T2>(new_pair, tail);
-            return;
+            return true;
         }
 
         node<T1, T2>* currentNode = head;
@@ -114,6 +114,7 @@ public:
                 }
             }
         }
+        return true;
     }
 
     node<T1, T2>* prevEl(node<T1, T2>* comparable)
