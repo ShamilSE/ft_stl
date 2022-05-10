@@ -111,6 +111,17 @@ namespace ft {
             bool isEnd;
         };
 
+        class value_compare
+        {
+        public:
+            key_compare    _comp;
+            value_compare(const key_compare &c) : _comp(c) {}
+            bool    operator ()(const value_type& lhs, const value_type& rhs) const
+            {
+                return _comp(lhs.first, rhs.first);
+            }
+        };
+
     private:
         bool isKeysEqual(const Key& firstKey, const Key& secondKey) const
         {
@@ -298,6 +309,15 @@ namespace ft {
         key_compare key_comp() const
         {
             return _comparator;
+        }
+
+        /*
+         * Returns a function object that compares objects of type std::map::value_type (key-value pairs)
+         * by using key_comp to compare the first components of the pairs.
+         */
+        value_compare value_comp() const
+        {
+            return value_compare();
         }
 
         iterator begin() { return iterator(getTree()); }
