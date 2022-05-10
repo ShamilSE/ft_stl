@@ -280,6 +280,17 @@ namespace ft {
 
         }
 
+        /*
+         * Exchanges the contents of the container with those of other.
+         * Does not invoke any move, copy, or swap operations on individual elements.
+         */
+        void swap( map& other )
+        {
+            avl_tree<Key, Tp, Compare, Allocator>* tmp = this->_tree;;
+            this->_tree = other._tree;
+            other._tree = tmp;
+        }
+
         iterator begin() { return iterator(getTree()); }
         iterator end() { return iterator(_tree, true); };
 

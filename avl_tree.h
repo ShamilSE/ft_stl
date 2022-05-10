@@ -32,9 +32,9 @@ public:
 
     void eraseNode(node<T2, T2>* nodeToErase)
     {
-        pairAllocator.destroy(nodeToErase->pair);
+        //pairAllocator.destroy(nodeToErase->pair);
         nodeAllocator.destroy(nodeToErase);
-        pairAllocator.deallocate(nodeToErase->pair, 1);
+        //pairAllocator.deallocate(nodeToErase->pair, 1);
         nodeAllocator.deallocate(nodeToErase, 1);
     }
 
