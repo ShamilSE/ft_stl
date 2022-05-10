@@ -10,7 +10,7 @@ void printMap(ft::map<Key, Value>& my_map)
         std::cout << *it << std::endl;
     }
 }
-
+/*
 bool iteratorTest() {
     ft::map<int, int> a;
     a.insert(ft::make_pair(1, 5));
@@ -120,13 +120,18 @@ bool countMethod()
 
     return true;
 }
-
+*/
 bool insertMethod()
 {
     ft::map<int,int>* my_map = new ft::map<int,int>();
 
     my_map->insert(ft::make_pair(1,1));
+    ft::map<int,int>::iterator it = my_map->begin();
+    std::cout << *it << std::endl;
     std::cout << "my_map.size() " << my_map->size() << std::endl;
+
+    ft::pair<ft::map<int,int>::iterator, bool> pair = my_map->insert(ft::make_pair(2,2));
+    std::cout << "inserted pair(2,2)\n" << pair.second << "\n" << *(pair.first) << std::endl;
 
     return true;
 }
