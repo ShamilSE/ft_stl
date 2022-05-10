@@ -121,11 +121,22 @@ bool countMethod()
     return true;
 }
 
+bool insertMethod()
+{
+    ft::map<int,int>* my_map = new ft::map<int,int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    std::cout << "my_map.size() " << my_map->size() << std::endl;
+
+    return true;
+}
+
 int main() {
+    insertMethod();
     //iteratorTest_2();
     //findMethod();
     //eraseMethod();
     //atMethod();
-    countMethod();
+    //countMethod();
     return 0;
 }
