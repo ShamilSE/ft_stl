@@ -19,10 +19,11 @@ namespace ft {
         const Compare  _comparator;
         size_t _size;
 
-
-        //TODO: [] operator overloading
-        // begin() must return minimal element (not head)
-        // memory allocation using allocator
+        /*
+         * TODO:
+         *  operator=
+         *
+         */
 
         typedef ft::pair<const Key, Tp> value_type;
 
@@ -214,7 +215,7 @@ namespace ft {
             if (nodeToDelete == _tree->getTailNode()) { return ; }
 
             node<Key, Tp>* replacement = _tree->findReplacement(pos.currentNode);
-            if (replacement == _tree->getTailNode())
+            if (replacement == _tree->getTailNode()) // если не нашли замену
             {
                 // уничтожить элемент
                 // ссылку у родителя постовить на tail
@@ -231,6 +232,9 @@ namespace ft {
                     {
                         nodeToDelete->parent->r = _tree->getTailNode();
                     }
+                }
+                if (nodeToDelete == _tree->getHeadNode()) {
+                    _tree->setHeadNode(_tree->getTailNode());
                 }
                 _tree->eraseNode(nodeToDelete);
                 _size--;
@@ -253,8 +257,7 @@ namespace ft {
                 _tree->eraseNode(nodeToDelete);
                 _size--;
             }
-
-            if (nodeToDelete->parent == _tree->getTailNode())
+            else
             {
                 node<Key, Tp>* tmpHead = _tree->getHeadNode();
                 if (
