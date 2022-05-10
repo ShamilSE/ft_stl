@@ -146,6 +146,55 @@ bool operatorBracketsMethodTest()
     (*my_map)[2];
     std::cout << my_map->size() << std::endl;
 
+    printMap(*my_map);
+
+    return true;
+}
+
+bool eraseMethod()
+{
+    ft::map<int,int>* my_map = new ft::map<int,int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    std::cout << my_map->size() << std::endl;
+    my_map->erase(my_map->begin());
+    std::cout << my_map->size() << std::endl;
+
+    return true;
+}
+
+bool clearMethod()
+{
+    ft::map<int,int>* my_map = new ft::map<int,int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    my_map->insert(ft::make_pair(5,5));
+    my_map->insert(ft::make_pair(-10,-10));
+    my_map->insert(ft::make_pair(-500,-500));
+
+    my_map->clear();
+    std::cout << my_map->size()  << std::endl;
+    return true;
+}
+
+bool swapMethod()
+{
+    ft::map<int,int>* my_map = new ft::map<int,int>();
+    ft::map<int,int>* my_map2 = new ft::map<int,int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    my_map->insert(ft::make_pair(2,2));
+    my_map->insert(ft::make_pair(3,3));
+
+    my_map2->insert(ft::make_pair(4,4));
+    my_map2->insert(ft::make_pair(5,5));
+    my_map2->insert(ft::make_pair(6,6));
+
+    printMap(*my_map);
+
+    my_map->swap(*my_map2);
+    printMap(*my_map);
+
     return true;
 }
 
@@ -155,7 +204,10 @@ int main() {
     //eraseMethod();
     //atMethod();
     //countMethod();
-    insertMethod();
-    operatorBracketsMethodTest();
+    //insertMethod();
+    //operatorBracketsMethodTest();
+    //eraseMethod();
+    //clearMethod();
+    swapMethod();
     return 0;
 }
