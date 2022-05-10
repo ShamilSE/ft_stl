@@ -8,7 +8,7 @@ private:
     node<T1, T2>*   head;
     node<T1, T2>*   tail;
     Comp            comparator;
-    typename Allocator::template rebind<node<T1, T2>>::other nodeAllocator;
+    typename Allocator::template rebind<node<T1, T2> >::other nodeAllocator;
     Allocator pairAllocator;
 
     typedef ft::pair<const T1, T2> value_type;

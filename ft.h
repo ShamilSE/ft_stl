@@ -41,6 +41,9 @@ struct pair
     template<class _U1, class _U2>
     pair(const pair<_U1, _U2> &p) : first(p.first), second(p.second) {}
 
+    template<class _U1, class _U2>
+    pair(pair<_U1, _U2> &p) : first(p.first), second(p.second) {}
+
     /*    copy constructor    */
     //pair(const pair &other) { *this = other; }
 };

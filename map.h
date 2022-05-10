@@ -32,7 +32,7 @@ namespace ft {
               _comparator(comp),
               _size(0)
         {
-            typename Allocator::template rebind<avl_tree<Key, Tp, Compare, Allocator>>::other avlTreeAllocator;
+            typename Allocator::template rebind<avl_tree<Key, Tp, Compare, Allocator> >::other avlTreeAllocator;
             _tree = avlTreeAllocator.allocate(1);
             new(_tree) avl_tree<Key, Tp, Compare, Allocator>;
         }
@@ -187,8 +187,10 @@ namespace ft {
         Tp& operator[]( const Key& key )
         {
             iterator el = find(key);
-            if (el.currentNode != _tree->getTailNode()) return el.currentNode->pair.second;
-            return insert(ft::make_pair(key, Tp())).second;
+            if (el.currentNode->isTail) {
+                return insert(ft::make_pair(key, Tp())).first.currentNode->pair.second;
+            }
+            return el.currentNode->pair.second;
         }
 
         size_t count( const Key& key ) const

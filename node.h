@@ -9,9 +9,9 @@ public:
     node* parent;
     node* l;
     node* r;
-    const ft::pair<const T1, T2>& pair;
+    ft::pair<T1, T2> pair;
 
-    node(node* tailNode, bool isTail = false, const ft::pair<const T1, T2>& pair = ft::make_pair(T1(), T2())) : pair(pair)
+    node(node* tailNode, bool isTail = false, ft::pair<T1, T2> pair = ft::make_pair(T1(), T2())) : pair(pair)
     {
         parent = tailNode;
         l = tailNode;
@@ -19,7 +19,7 @@ public:
         this->isTail = isTail;
     }
 
-    node(const ft::pair<const T1, T2>& pair, node* tailNode, bool isTail = false) : pair(pair) {
+    node(const ft::pair<T1, T2>& pair, node* tailNode, bool isTail = false) : pair(pair) {
         parent = tailNode;
         l = tailNode;
         r = tailNode;
