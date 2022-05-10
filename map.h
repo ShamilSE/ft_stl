@@ -24,6 +24,8 @@ namespace ft {
         // begin() must return minimal element (not head)
         // memory allocation using allocator
 
+        typedef ft::pair<const Key, Tp> value_type;
+
     public:
         explicit map(const Compare& comp = Compare(), Allocator allocator = Allocator())
             : _allocator(allocator),
@@ -99,7 +101,7 @@ namespace ft {
             }
 
             Tp operator* () {
-                return currentNode->pair->second;
+                return currentNode->pair.second;
             }
 
             void setCurrentNode(node<Key, Tp>* node) { this->currentNode = node; }
@@ -116,15 +118,15 @@ namespace ft {
 
     public:
 
-        ft::pair<bool, iterator> insert(ft::pair<Key, Tp>& new_pair)
+        ft::pair<iterator, bool> insert(const value_type& value)
         {
-            bool inserted = _tree->insert(new_pair);
+            bool inserted = _tree->insert(value);
             iterator it = end();
             if (inserted) {
-                it = find(new_pair.second);
                 _size++;
+                it = find(value.first);
             }
-            return ft::make_pair(inserted, it);
+            return ft::make_pair(it, inserted);
         }
 
         iterator find(const Key& key) const
@@ -141,7 +143,7 @@ namespace ft {
             while (true)
             {
                 if (
-                    (isKeysEqual(currentNode->pair->first, key))
+                    (isKeysEqual(currentNode->pair.first, key))
                     ||
                     (currentNode == _tree->getTailNode())
                    )
@@ -150,7 +152,7 @@ namespace ft {
                     it.setCurrentNode(currentNode);
                     return it;
                 }
-                else if (!_comparator(currentNode->pair->first, key))
+                else if (!_comparator(currentNode->pair.first, key))
                 {
                     currentNode = _tree->prevEl(currentNode);
                 }
@@ -171,7 +173,7 @@ namespace ft {
             iterator element = find(key);
             if (element.currentNode == _tree->getTailNode()) throw std::out_of_range("");
 
-            return element.currentNode->pair->second;
+            return element.currentNode->pair.second;
         }
 
         const Tp& at( const Key& key ) const
@@ -179,13 +181,13 @@ namespace ft {
             iterator element = find(key);
             if (element.currentNode == _tree->getTailNode()) throw std::out_of_range("");
 
-            return element.currentNode->pair->second;
+            return element.currentNode->pair.second;
         }
 
         Tp& operator[]( const Key& key )
         {
             iterator el = find(key);
-            if (el.currentNode != _tree->getTailNode()) return el.currentNode->pair->second;
+            if (el.currentNode != _tree->getTailNode()) return el.currentNode->pair.second;
             return insert(ft::make_pair(key, Tp())).second;
         }
 
@@ -205,7 +207,7 @@ namespace ft {
 
         void erase(iterator pos)
         {
-            node<Key, Tp>* nodeToDelete = find(pos.currentNode->pair->first).currentNode;
+            node<Key, Tp>* nodeToDelete = find(pos.currentNode->pair.first).currentNode;
 
             if (nodeToDelete == _tree->getTailNode()) { return ; }
 
@@ -218,7 +220,7 @@ namespace ft {
                 {
                     if (
                         nodeToDelete->parent->l != _tree->getTailNode() &&
-                        isKeysEqual(nodeToDelete->parent->l->pair->first, nodeToDelete->pair->first)
+                        isKeysEqual(nodeToDelete->parent->l->pair.first, nodeToDelete->pair.first)
                        )
                     {
                         nodeToDelete->parent->l = _tree->getTailNode();
@@ -236,7 +238,7 @@ namespace ft {
             if (nodeToDelete->parent != _tree->getTailNode())
             {
                 // if nodeToDelete is right (position) child
-                if (isKeysEqual(nodeToDelete->parent->r->pair->first, nodeToDelete->pair->first))
+                if (isKeysEqual(nodeToDelete->parent->r->pair.first, nodeToDelete->pair.first))
                 {
                     nodeToDelete->parent->r = replacement;
                     replacement->parent = nodeToDelete->parent;
@@ -255,7 +257,7 @@ namespace ft {
                 node<Key, Tp>* tmpHead = _tree->getHeadNode();
                 if (
                         tmpHead->l != _tree->getTailNode() &&
-                        isKeysEqual(tmpHead->l->pair->first, nodeToDelete->pair->first)
+                        isKeysEqual(tmpHead->l->pair.first, nodeToDelete->pair.first)
                    )
                 {
                     replacement->r = tmpHead->r;

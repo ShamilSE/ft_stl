@@ -11,6 +11,8 @@ private:
     typename Allocator::template rebind<node<T1, T2>>::other nodeAllocator;
     Allocator pairAllocator;
 
+    typedef ft::pair<const T1, T2> value_type;
+
     // TODO: resolve providing tailNode to each new one
     node<T1, T2>* createTailNode()
     {
@@ -72,25 +74,25 @@ public:
         return currentNode;
     }
 
-    bool insert(ft::pair<T1, T2>& new_pair) // TODO: make correct exit status
+    bool insert(const value_type& value) // TODO: make correct exit status
     {
         bool elInserted = false;
         if (head == tail) {
             head = nodeAllocator.allocate(1);
-            new(head) node<T1, T2>(new_pair, tail);
+            new(head) node<T1, T2>(value, tail);
             return true;
         }
 
         node<T1, T2>* currentNode = head;
         while (!elInserted)
         {
-            bool toLeftSide = comparator(new_pair.first, currentNode->pair->first);
+            bool toLeftSide = comparator(value.first, currentNode->pair.first);
             if (toLeftSide)
             {
                 if (currentNode->l == tail)
                 {
                     currentNode->l = nodeAllocator.allocate(1);
-                    new(currentNode->l) node<T1, T2>(new_pair, tail);
+                    new(currentNode->l) node<T1, T2>(value, tail);
                     currentNode->l->parent = currentNode;
                     elInserted = true;
                 }
@@ -104,7 +106,7 @@ public:
                 if (currentNode->r == tail)
                 {
                     currentNode->r = nodeAllocator.allocate(1);
-                    new(currentNode->r) node<T1, T2>(new_pair, tail);
+                    new(currentNode->r) node<T1, T2>(value, tail);
                     currentNode->r->parent = currentNode;
                     elInserted = true;
                 }
@@ -129,7 +131,7 @@ public:
         while (true)
         {
             if (currentNode->l != tail && !madeStepLeft) {
-                if (!comparator(currentNode->pair->first, currentNode->l->pair->first)) {
+                if (!comparator(currentNode->pair.first, currentNode->l->pair.first)) {
                     currentNode = currentNode->l;
                     madeStepLeft = true;
                     if (currentNode->r == tail) {
@@ -138,7 +140,7 @@ public:
                 }
             }
             else if (currentNode->r != tail && madeStepLeft) {
-                if (comparator(currentNode->pair->first, currentNode->r->pair->first)) {
+                if (comparator(currentNode->pair.first, currentNode->r->pair.first)) {
                     currentNode = currentNode->r;
                 }
                 else return currentNode;
@@ -146,7 +148,7 @@ public:
             else if (!madeStepLeft) {
                 if (
                         currentNode->parent != tail &&
-                        !comparator(currentNode->pair->first, currentNode->parent->pair->first)
+                        !comparator(currentNode->pair.first, currentNode->parent->pair.first)
                         )
                 {
                     return currentNode->parent;
@@ -168,7 +170,7 @@ public:
         while (true)
         {
             if (currentNode->r != tail && !madeStepRight) {
-                if (comparator(currentNode->pair->first, currentNode->r->pair->first)) {
+                if (comparator(currentNode->pair.first, currentNode->r->pair.first)) {
                     currentNode = currentNode->r;
                     madeStepRight = true;
                     if (currentNode->l == tail) {
@@ -177,7 +179,7 @@ public:
                 }
             }
             else if (currentNode->l != tail && madeStepRight) {
-                if (!comparator(currentNode->pair->first, currentNode->l->pair->first)) {
+                if (!comparator(currentNode->pair.first, currentNode->l->pair.first)) {
                     currentNode = currentNode->l;
                 }
                 else return currentNode;
@@ -185,7 +187,7 @@ public:
             else if (!madeStepRight) {
                 if (
                         currentNode->parent != tail &&
-                        comparator(currentNode->pair->first, currentNode->parent->pair->first)
+                        comparator(currentNode->pair.first, currentNode->parent->pair.first)
                     )
                 {
                         return currentNode->parent;
