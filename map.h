@@ -26,6 +26,7 @@ namespace ft {
          */
 
         typedef ft::pair<const Key, Tp> value_type;
+        typedef Compare                 key_compare;
 
     public:
         explicit map(const Compare& comp = Compare(), Allocator allocator = Allocator())
@@ -289,6 +290,14 @@ namespace ft {
             avl_tree<Key, Tp, Compare, Allocator>* tmp = this->_tree;;
             this->_tree = other._tree;
             other._tree = tmp;
+        }
+
+        /* Returns the function object that compares the keys,
+         * which is a copy of this container's constructor argument comp.
+        */
+        key_compare key_comp() const
+        {
+            return _comparator;
         }
 
         iterator begin() { return iterator(getTree()); }
