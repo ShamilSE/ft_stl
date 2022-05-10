@@ -198,6 +198,19 @@ bool swapMethod()
     return true;
 }
 
+bool key_compare_method()
+{
+    ft::map<int,int>* my_map = new ft::map<int,int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    my_map->insert(ft::make_pair(5,5));
+    std::less<int> comparator = my_map->key_comp();
+    std::cout << comparator(1,12) << std::endl;
+    std::cout << comparator(12,1) << std::endl;
+
+    return true;
+}
+
 int main() {
     //iteratorTest_2();
     //findMethod();
@@ -208,6 +221,7 @@ int main() {
     //operatorBracketsMethodTest();
     //eraseMethod();
     //clearMethod();
-    swapMethod();
+    //swapMethod();
+    //key_compare_method();
     return 0;
 }
