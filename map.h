@@ -142,7 +142,7 @@ namespace ft {
             return ft::make_pair(it, inserted);
         }
 
-        iterator find(const Key& key) const
+        iterator find(const Key& key)
         {
             node<Key, Tp> *currentNode;
             if (_size == 0) {
@@ -160,6 +160,41 @@ namespace ft {
                     ||
                     (currentNode == _tree->getTailNode())
                    )
+                {
+                    iterator it = iterator(_tree);
+                    it.setCurrentNode(currentNode);
+                    return it;
+                }
+                else if (!_comparator(currentNode->pair.first, key))
+                {
+                    currentNode = _tree->prevEl(currentNode);
+                }
+                else
+                {
+                    currentNode = _tree->nextEl(currentNode);
+                    if (currentNode == _tree->getTailNode()) return iterator(_tree, true);
+                }
+            }
+        }
+
+        const iterator find(const Key& key) const
+        {
+            node<Key, Tp> *currentNode;
+            if (_size == 0) {
+                iterator it = iterator(_tree, true);
+                return it;
+            }
+            else {
+                currentNode = _tree->getHeadNode();
+            }
+
+            while (true)
+            {
+                if (
+                        (isKeysEqual(currentNode->pair.first, key))
+                        ||
+                        (currentNode == _tree->getTailNode())
+                        )
                 {
                     iterator it = iterator(_tree);
                     it.setCurrentNode(currentNode);
@@ -319,6 +354,53 @@ namespace ft {
         {
             return value_compare();
         }
+
+        //Returns an iterator pointing to the first element that is not less than (i.e. greater or equal to) key.
+        iterator lower_bound( const Key& key )
+        {
+            iterator it = find(key);
+            return it;
+        }
+
+        //Returns an iterator pointing to the first element that is not less than (i.e. greater or equal to) key.
+        const iterator lower_bound( const Key& key ) const
+        {
+            iterator it = find(key);
+            return it;
+        }
+
+        //Returns an iterator pointing to the first element that is greater than key.
+        iterator upper_bound( const Key& key )
+        {
+            iterator it = find(key);
+            it++;
+            return it;
+        }
+
+        //Returns an iterator pointing to the first element that is greater than key.
+        const iterator upper_bound( const Key& key ) const
+        {
+            iterator it = find(key);
+            it++;
+            return it;
+        }
+
+        /*
+         * Returns a range containing all elements with the given key in the container.
+         * The range is defined by two iterators, one pointing to the first element that is not less than key and another pointing to the first element greater than key.
+         * Alternatively, the first iterator may be obtained with lower_bound(), and the second with upper_bound().
+         */
+        std::pair<iterator,iterator> equal_range( const Key& key )
+        {
+            return ft::make_pair(lower_bound(key), upper_bound(key));
+        }
+
+        const std::pair<iterator,iterator> equal_range( const Key& key ) const
+        {
+            return ft::make_pair(lower_bound(key), upper_bound(key));
+        }
+
+        //iterator
 
         iterator begin() { return iterator(getTree()); }
         iterator end() { return iterator(_tree, true); };
