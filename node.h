@@ -9,7 +9,7 @@ public:
     node* parent;
     node* l;
     node* r;
-    ft::pair<T1, T2> pair;
+    ft::pair<const T1, T2> pair;
 
     node(node* tailNode, bool isTail = false, ft::pair<T1, T2> pair = ft::make_pair(T1(), T2())) : pair(pair)
     {
@@ -24,10 +24,7 @@ public:
         l = tailNode;
         r = tailNode;
         this->isTail = isTail;
-        std::cout << "node constructor called\n\tvalue: " << pair.second << std::endl;
     }
 
-    ~node() {
-        std::cout << "node destructor called\n\tvalue: " << std::endl;
-    }
+    ~node() {}
 };
