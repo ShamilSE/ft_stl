@@ -1,17 +1,12 @@
 #include <map>
 #include "map.h"
 #include <iostream>
+#include <gtest/gtest.h>
 
-template <typename Key, typename Value>
-void printMap(ft::map<Key, Value>& my_map)
-{
-    for (typename ft::map<Key,Value>::iterator it = my_map.begin(); it != my_map.end(); it++)
-    {
-        std::cout << *it << std::endl;
-    }
-}
-/*
-bool iteratorTest() {
+
+
+
+TEST(map, iterator_test) {
     ft::map<int, int> a;
     a.insert(ft::make_pair(1, 5));
     a.insert(ft::make_pair(5, 4));
@@ -24,9 +19,19 @@ bool iteratorTest() {
     origin.insert(std::make_pair(3, 9));
     origin.insert(std::make_pair(4, 16));
 
-    return true;
-}
+    ft::map<int,int>::iterator ftIt = a.begin();
+    std::map<int,int>::iterator stdIt = origin.begin();
 
+    size_t i = 0;
+    while (stdIt != origin.end()) {
+        EXPECT_EQ(ftIt->second, stdIt->second);
+        std::cout << i << " " << ftIt->second << " / " << stdIt->second << std::endl;
+        ftIt++;
+        stdIt++;
+        i++;
+    }
+}
+/*
 bool iteratorTest_2() {
     ft::map<int, int> my_map;
 
@@ -120,7 +125,7 @@ bool countMethod()
 
     return true;
 }
-*/
+
 bool insertMethod()
 {
     ft::map<int,int>* my_map = new ft::map<int,int>();
@@ -147,18 +152,6 @@ bool operatorBracketsMethodTest()
     std::cout << my_map->size() << std::endl;
 
     printMap(*my_map);
-
-    return true;
-}
-
-bool eraseMethod()
-{
-    ft::map<int,int>* my_map = new ft::map<int,int>();
-
-    my_map->insert(ft::make_pair(1,1));
-    std::cout << my_map->size() << std::endl;
-    my_map->erase(my_map->begin());
-    std::cout << my_map->size() << std::endl;
 
     return true;
 }
@@ -210,18 +203,4 @@ bool key_compare_method()
 
     return true;
 }
-
-int main() {
-    //iteratorTest_2();
-    //findMethod();
-    //eraseMethod();
-    //atMethod();
-    //countMethod();
-    //insertMethod();
-    //operatorBracketsMethodTest();
-    //eraseMethod();
-    //clearMethod();
-    //swapMethod();
-    //key_compare_method();
-    return 0;
-}
+*/
