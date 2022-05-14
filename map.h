@@ -57,7 +57,6 @@ namespace ft {
                 }
             }
 
-        public:
             iterator operator++ (int) {
                 currentNode = _tree->nextEl(currentNode);
                 return *this;
@@ -102,9 +101,9 @@ namespace ft {
                 return this->currentNode <= other.currentNode;
             }
 
-            Tp operator* () {
-                return currentNode->pair.second;
-            }
+            value_type& operator* () { return currentNode->pair; }
+
+            value_type* operator->() { return &currentNode->pair; }
 
             void setCurrentNode(node<Key, Tp>* node) { this->currentNode = node; }
 
