@@ -14,6 +14,7 @@ private:
     typedef ft::pair<const T1, T2> value_type;
 
     // TODO: resolve providing tailNode to each new one
+    // TODO: tail node height is 0
     node<T1, T2>* createTailNode()
     {
         node<T1, T2>* tailNode = nodeAllocator.allocate(1);
@@ -74,26 +75,41 @@ public:
         return currentNode;
     }
 
-    bool insert(const value_type& value) // TODO: make correct exit status
+    void calculateHeight(node<T1, T2>* node)
+    {
+        while (!node->isTail)
+        {
+            fixheight(node);
+            node = node->parent;
+        }
+    }
+
+    node<T1, T2>* createNode(const value_type& value)
+    {
+        node<T1, T2>* pNewNode = nodeAllocator.allocate(1);
+        new(pNewNode) node<T1, T2>(value, tail);
+        return pNewNode;
+    }
+
+    bool insert(node<T1, T2>* nodeToInsert) // TODO: make correct exit status
     {
         bool elInserted = false;
         if (head == tail) {
-            head = nodeAllocator.allocate(1);
-            new(head) node<T1, T2>(value, tail);
+            head = nodeToInsert;
             return true;
         }
 
         node<T1, T2>* currentNode = head;
         while (!elInserted)
         {
-            bool toLeftSide = comparator(value.first, currentNode->pair.first);
+            bool toLeftSide = comparator(nodeToInsert->pair.first, currentNode->pair.first);
             if (toLeftSide)
             {
                 if (currentNode->l == tail)
                 {
-                    currentNode->l = nodeAllocator.allocate(1);
-                    new(currentNode->l) node<T1, T2>(value, tail);
+                    currentNode->l = nodeToInsert;
                     currentNode->l->parent = currentNode;
+                    calculateHeight(currentNode->l);
                     elInserted = true;
                 }
                 else
@@ -105,9 +121,9 @@ public:
             {
                 if (currentNode->r == tail)
                 {
-                    currentNode->r = nodeAllocator.allocate(1);
-                    new(currentNode->r) node<T1, T2>(value, tail);
+                    currentNode->r = nodeToInsert;
                     currentNode->r->parent = currentNode;
+                    calculateHeight(currentNode->r);
                     elInserted = true;
                 }
                 else
@@ -116,6 +132,7 @@ public:
                 }
             }
         }
+        //calculateHeight(currentNode->parent, currentNode);
         return true;
     }
 
@@ -195,6 +212,29 @@ public:
                 else return tail;
             } else return currentNode;
         }
+    }
+
+    bool isKeysEqual(const T1& firstKey, const T2& secondKey) const
+    {
+        return !comparator(firstKey, secondKey)
+               && !comparator(secondKey, firstKey);
+    }
+
+    size_t height(node<T1, T2>* node)
+    {
+        return node?node->height:0;
+    }
+
+    int bfactor(node<T1, T2>* node)
+    {
+        return height(node->r)-height(node->l);
+    }
+
+    void fixheight(node<T1, T2>* p)
+    {
+        unsigned char hl = height(p->l);
+        unsigned char hr = height(p->r);
+        p->height = (hl>hr?hl:hr)+1;
     }
 
     node<T1, T2>* getHeadNode() { return head; }
