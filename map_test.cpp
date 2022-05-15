@@ -9,6 +9,7 @@
 TEST(map, iterator_test) {
     ft::map<int, int> a;
     a.insert(ft::make_pair(1, 5));
+    a.insert(ft::make_pair(-1, -5));
     a.insert(ft::make_pair(5, 4));
     a.insert(ft::make_pair(3, 9));
     a.insert(ft::make_pair(4, 16));
@@ -22,17 +23,14 @@ TEST(map, iterator_test) {
     ft::map<int,int>::iterator ftIt = a.begin();
     std::map<int,int>::iterator stdIt = origin.begin();
 
-    size_t i = 0;
     while (stdIt != origin.end()) {
         EXPECT_EQ(ftIt->second, stdIt->second);
-        std::cout << i << " " << ftIt->second << " / " << stdIt->second << std::endl;
         ftIt++;
         stdIt++;
-        i++;
     }
 }
-/*
-bool iteratorTest_2() {
+
+TEST(map, iterator_test_2) {
     ft::map<int, int> my_map;
 
     my_map.insert(ft::make_pair(1, 5));
@@ -42,13 +40,10 @@ bool iteratorTest_2() {
     my_map.insert(ft::make_pair(5, 9));
     my_map.insert(ft::make_pair(-10, 1000));
 
-    for (auto it = my_map.begin(); it != my_map.end(); it++) {
-        std::cout << *it << std::endl;
-    }
-    return true;
+    EXPECT_EQ(my_map.end()->second, 0);
 }
 
-bool findMethod() {
+TEST(map, find_method) {
     ft::map<int, int> my_map;
 
     my_map.insert(ft::make_pair(1, 5));
@@ -56,18 +51,11 @@ bool findMethod() {
     my_map.insert(ft::make_pair(3, 7));
     my_map.insert(ft::make_pair(4, 8));
 
-    ft::map<int, int>::iterator it = my_map.find(4);
-    std::cout << *it << std::endl;
-    it = my_map.find(1);
-    std::cout << *it << std::endl;
-    it = my_map.find(2);
-    std::cout << *it << std::endl;
-    it = my_map.find(3);
-    std::cout << *it << std::endl;
-    return true;
+    ft::map<int,int>::iterator it =  my_map.find(1);
+    EXPECT_EQ(it->second, 5);
 }
 
-bool eraseMethod() {
+TEST(map, find_method_2) {
     ft::map<int, int> my_map;
 
     my_map.insert(ft::make_pair(1, 5));
@@ -75,89 +63,85 @@ bool eraseMethod() {
     my_map.insert(ft::make_pair(3, 7));
     my_map.insert(ft::make_pair(4, 8));
 
-    std::cout << "print map first time" << std::endl;
-    printMap(my_map);
+    ft::map<int,int>::iterator it =  my_map.find(10);
+    EXPECT_EQ(it.isEnd, true);
+}
+
+TEST(map, erase_method) {
+    ft::map<int, int> my_map;
+
+    my_map.insert(ft::make_pair(1, 5));
+    my_map.insert(ft::make_pair(2, 6));
+    my_map.insert(ft::make_pair(3, 7));
+    my_map.insert(ft::make_pair(4, 8));
+
     ft::map<int, int>::iterator it = my_map.begin();
     it++;
     my_map.erase(it);
-    std::cout << "print map second time" << std::endl;
-    printMap(my_map);
-    return false;
+
+    ft::map<int,int>::iterator it2 = my_map.find(2);
+
+    EXPECT_EQ(it2.currentNode->isTail, true);
 }
 
-bool atMethod()
+TEST(map, at_method)
 {
     ft::map<int, int>* my_map = new ft::map<int, int>();
 
-    my_map->insert(ft::make_pair(1,1));
+    my_map->insert(ft::make_pair(1,10));
     my_map->insert(ft::make_pair(2,2));
 
-    try
-    {
-        const int key = 1;
-        int a = my_map->at(key);
-        std::cout << "found by at() " << a << std::endl;
-    }
-    catch (std::out_of_range&)
-    {
-        std::cout << "amogus" << std::endl;
-    }
+    int a = my_map->at(1);
+    EXPECT_EQ(a, 10);
 
     try
     {
-        [[maybe_unused]] int a = my_map->at(3);
+        my_map->at(3);
     }
-    catch (std::out_of_range&)
-    {
-        std::cout << "amogus" << std::endl;
-    }
-
-    return true;
+    catch (std::out_of_range&) {}
 }
 
-bool countMethod()
-{
+TEST(map, count_method) {
+
     ft::map<int, int>* my_map = new ft::map<int, int>();
 
     my_map->insert(ft::make_pair(1,1));
-    std::cout << "count() returns " << my_map->count(1) << std::endl;
-    std::cout << "count() returns " << my_map->count(2) << std::endl;
-
-    return true;
+    EXPECT_EQ(my_map->count(1), 1);
+    EXPECT_EQ(my_map->count(2), 0);
 }
 
-bool insertMethod()
-{
+TEST(map, insert_method) {
     ft::map<int,int>* my_map = new ft::map<int,int>();
 
     my_map->insert(ft::make_pair(1,1));
-    ft::map<int,int>::iterator it = my_map->begin();
-    std::cout << *it << std::endl;
-    std::cout << "my_map.size() " << my_map->size() << std::endl;
 
     ft::pair<ft::map<int,int>::iterator, bool> pair = my_map->insert(ft::make_pair(2,2));
-    std::cout << "inserted pair(2,2)\n" << pair.second << "\n" << *(pair.first) << std::endl;
-
-    return true;
+    EXPECT_EQ(pair.first->second, 2);
+    EXPECT_EQ(pair.second, true);
 }
 
-bool operatorBracketsMethodTest()
-{
+TEST(map, brackets) {
     ft::map<int,int>* my_map = new ft::map<int,int>();
 
     my_map->insert(ft::make_pair(1,1));
-    std::cout << my_map->size() << std::endl;
-
     (*my_map)[2];
-    std::cout << my_map->size() << std::endl;
 
-    printMap(*my_map);
-
-    return true;
+    EXPECT_EQ(my_map->find(2)->second, 0);
 }
 
-bool clearMethod()
-{
+TEST(map, begin_iterator) {
+    ft::map<int,int>* my_map = new ft::map<int,int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    my_map->insert(ft::make_pair(5,5));
+    my_map->insert(ft::make_pair(-10,-10));
+
+    ft::map<int,int>::iterator it = my_map->begin();
+
+    EXPECT_EQ(it->first, -10);
+}
+
+TEST(map, clear_method) {
     ft::map<int,int>* my_map = new ft::map<int,int>();
 
     my_map->insert(ft::make_pair(1,1));
@@ -166,12 +150,10 @@ bool clearMethod()
     my_map->insert(ft::make_pair(-500,-500));
 
     my_map->clear();
-    std::cout << my_map->size()  << std::endl;
-    return true;
+    EXPECT_EQ(my_map->_tree->getHeadNode()->isTail, true);
 }
 
-bool swapMethod()
-{
+TEST(map, swap_method) {
     ft::map<int,int>* my_map = new ft::map<int,int>();
     ft::map<int,int>* my_map2 = new ft::map<int,int>();
 
@@ -183,16 +165,13 @@ bool swapMethod()
     my_map2->insert(ft::make_pair(5,5));
     my_map2->insert(ft::make_pair(6,6));
 
-    printMap(*my_map);
-
     my_map->swap(*my_map2);
-    printMap(*my_map);
 
-    return true;
+    EXPECT_EQ(my_map->begin()->second, 4);
 }
 
-bool key_compare_method()
-{
+
+TEST(map, compare_method) {
     ft::map<int,int>* my_map = new ft::map<int,int>();
 
     my_map->insert(ft::make_pair(1,1));
@@ -201,6 +180,6 @@ bool key_compare_method()
     std::cout << comparator(1,12) << std::endl;
     std::cout << comparator(12,1) << std::endl;
 
-    return true;
+    EXPECT_EQ(comparator(1,12), 1);
+    EXPECT_EQ(comparator(12,1), 0);
 }
-*/
