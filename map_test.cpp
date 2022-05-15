@@ -4,8 +4,6 @@
 #include <gtest/gtest.h>
 
 
-
-
 TEST(map, iterator_test) {
     ft::map<int, int> a;
     a.insert(ft::make_pair(1, 5));
@@ -29,7 +27,6 @@ TEST(map, iterator_test) {
         stdIt++;
     }
 }
-
 TEST(map, iterator_test_2) {
     ft::map<int, int> my_map;
 
@@ -42,6 +39,7 @@ TEST(map, iterator_test_2) {
 
     EXPECT_EQ(my_map.end()->second, 0);
 }
+
 
 TEST(map, find_method) {
     ft::map<int, int> my_map;
@@ -182,4 +180,15 @@ TEST(map, compare_method) {
 
     EXPECT_EQ(comparator(1,12), 1);
     EXPECT_EQ(comparator(12,1), 0);
+}
+
+TEST(map, fixheight)
+{
+    ft::map<int,int>* my_map = new ft::map<int,int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    my_map->insert(ft::make_pair(2,2));
+    my_map->insert(ft::make_pair(3,3));
+
+
 }

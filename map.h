@@ -19,14 +19,12 @@ namespace ft {
         const Compare  _comparator;
         size_t _size;
 
-        /*
-         * TODO:
-         *  operator=
-         *
-         */
+        node<Key, Tp>* bf2node;
 
         typedef ft::pair<const Key, Tp> value_type;
         typedef Compare                 key_compare;
+
+        //TODO: refactor insert method
 
     public:
         explicit map(const Compare& comp = Compare(), Allocator allocator = Allocator())
@@ -127,10 +125,6 @@ namespace ft {
         {
             node<Key, Tp>* nodeToInsert = _tree->createNode(value);
             bool inserted = _tree->insert(nodeToInsert);
-            int bf = 0;
-            if (!nodeToInsert->parent->isTail && !nodeToInsert->parent->l->isTail && !nodeToInsert->parent->r->isTail) {
-                bf = _tree->bfactor(nodeToInsert->parent);
-            }
             iterator it = end();
             if (inserted) {
                 _size++;
@@ -303,6 +297,7 @@ namespace ft {
                     replacement->parent = nodeToDelete->parent;
                 }
                 _tree->eraseNode(nodeToDelete);
+                _tree->calculateHeight(replacement);
                 _size--;
             }
             else
@@ -323,6 +318,7 @@ namespace ft {
                 }
                 _tree->eraseNode(tmpHead);
                 _tree->setHeadNode(replacement);
+                _tree->calculateHeight(replacement);
                 _size--;
             }
 

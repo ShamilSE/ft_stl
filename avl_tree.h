@@ -14,7 +14,6 @@ private:
     typedef ft::pair<const T1, T2> value_type;
 
     // TODO: resolve providing tailNode to each new one
-    // TODO: tail node height is 0
     node<T1, T2>* createTailNode()
     {
         node<T1, T2>* tailNode = nodeAllocator.allocate(1);
@@ -79,7 +78,7 @@ public:
     {
         while (!node->isTail)
         {
-            fixheight(node);
+            balance(node);
             node = node->parent;
         }
     }
@@ -235,6 +234,54 @@ public:
         unsigned char hl = height(p->l);
         unsigned char hr = height(p->r);
         p->height = (hl>hr?hl:hr)+1;
+    }
+
+    node<T1, T2>* balance(node<T1, T2>* p) // балансировка узла p
+    {
+        fixheight(p);
+        if( bfactor(p)==2 )
+        {
+            if( bfactor(p->r) < 0 )
+                p->r = rotateright(p->r);
+            return rotateleft(p);
+        }
+        if( bfactor(p)==-2 )
+        {
+            if( bfactor(p->l) > 0  )
+                p->l = rotateleft(p->l);
+            return rotateright(p);
+        }
+        return p; // балансировка не нужна
+    }
+
+    node<T1, T2>* rotateright(node<T1, T2>* p) // правый поворот вокруг p
+    {
+        node<T1, T2>* q = p->l;
+        if (p == head) {
+            head = q;
+            head->parent = tail;
+        }
+        p->l = q->r;
+        q->r = p;
+        p->parent = q;
+        fixheight(p);
+        fixheight(q);
+        return q;
+    }
+
+    node<T1, T2>* rotateleft(node<T1, T2>* q) // левый поворот вокруг q
+    {
+        node<T1, T2>* p = q->r;
+        if (q == head) {
+            head = p;
+            head->parent = tail;
+        }
+        q->r = p->l;
+        p->l = q;
+        q->parent = p;
+        fixheight(q);
+        fixheight(p);
+        return p;
     }
 
     node<T1, T2>* getHeadNode() { return head; }
