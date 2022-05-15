@@ -49,11 +49,11 @@ namespace ft {
             explicit iterator(avl_tree<Key, Tp, Compare, Allocator>* tree, bool isEnd = false)
             : _tree(tree), isEnd(isEnd)
             {
-                if (isEnd == false) {
-                    currentNode = _tree->getFirstNode();
+                if (isEnd) {
+                    currentNode = _tree->getTailNode();
                 }
                 else {
-                    currentNode = _tree->getTailNode();
+                    currentNode = _tree->getFirstNode();
                 }
             }
 
@@ -121,18 +121,16 @@ namespace ft {
             }
         };
 
-    private:
-        bool isKeysEqual(const Key& firstKey, const Key& secondKey) const
-        {
-            return !_comparator(firstKey, secondKey)
-                && !_comparator(secondKey, firstKey);
-        }
-
     public:
 
         ft::pair<iterator, bool> insert(const value_type& value)
         {
-            bool inserted = _tree->insert(value);
+            node<Key, Tp>* nodeToInsert = _tree->createNode(value);
+            bool inserted = _tree->insert(nodeToInsert);
+            int bf = 0;
+            if (!nodeToInsert->parent->isTail && !nodeToInsert->parent->l->isTail && !nodeToInsert->parent->r->isTail) {
+                bf = _tree->bfactor(nodeToInsert->parent);
+            }
             iterator it = end();
             if (inserted) {
                 _size++;
@@ -152,20 +150,24 @@ namespace ft {
                 currentNode = _tree->getHeadNode();
             }
 
+            iterator it = iterator(_tree);
             while (true)
             {
                 if (
-                    (isKeysEqual(currentNode->pair.first, key))
+                    (_tree->isKeysEqual(currentNode->pair.first, key))
                     ||
                     (currentNode == _tree->getTailNode())
                    )
                 {
-                    iterator it = iterator(_tree);
                     it.setCurrentNode(currentNode);
                     return it;
                 }
                 else if (!_comparator(currentNode->pair.first, key))
                 {
+                    if (currentNode->l->isTail) {
+                        it.setCurrentNode(_tree->getTailNode());
+                        return it;
+                    }
                     currentNode = _tree->prevEl(currentNode);
                 }
                 else
@@ -190,7 +192,7 @@ namespace ft {
             while (true)
             {
                 if (
-                        (isKeysEqual(currentNode->pair.first, key))
+                        (_tree->isKeysEqual(currentNode->pair.first, key))
                         ||
                         (currentNode == _tree->getTailNode())
                         )
@@ -269,7 +271,7 @@ namespace ft {
                 {
                     if (
                         nodeToDelete->parent->l != _tree->getTailNode() &&
-                        isKeysEqual(nodeToDelete->parent->l->pair.first, nodeToDelete->pair.first)
+                        _tree->isKeysEqual(nodeToDelete->parent->l->pair.first, nodeToDelete->pair.first)
                        )
                     {
                         nodeToDelete->parent->l = _tree->getTailNode();
@@ -290,7 +292,7 @@ namespace ft {
             if (nodeToDelete->parent != _tree->getTailNode())
             {
                 // if nodeToDelete is right (position) child
-                if (isKeysEqual(nodeToDelete->parent->r->pair.first, nodeToDelete->pair.first))
+                if (_tree->isKeysEqual(nodeToDelete->parent->r->pair.first, nodeToDelete->pair.first))
                 {
                     nodeToDelete->parent->r = replacement;
                     replacement->parent = nodeToDelete->parent;
@@ -308,7 +310,7 @@ namespace ft {
                 node<Key, Tp>* tmpHead = _tree->getHeadNode();
                 if (
                         tmpHead->l != _tree->getTailNode() &&
-                        isKeysEqual(tmpHead->l->pair.first, nodeToDelete->pair.first)
+                        _tree->isKeysEqual(tmpHead->l->pair.first, nodeToDelete->pair.first)
                    )
                 {
                     replacement->r = tmpHead->r;
