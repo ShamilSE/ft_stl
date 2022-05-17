@@ -19,8 +19,6 @@ namespace ft {
         const Compare  _comparator;
         size_t _size;
 
-        node<Key, Tp>* bf2node;
-
         typedef ft::pair<const Key, Tp> value_type;
         typedef Compare                 key_compare;
 
