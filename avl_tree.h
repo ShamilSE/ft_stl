@@ -261,6 +261,10 @@ public:
             head = q;
             head->parent = tail;
         }
+        else {
+            p->parent->l = q;
+            q->parent = p->parent;
+        }
         p->l = q->r;
         q->r = p;
         p->parent = q;
@@ -275,6 +279,10 @@ public:
         if (q == head) {
             head = p;
             head->parent = tail;
+        }
+        else {
+            q->parent->r = p;
+            p->parent = q->parent;
         }
         q->r = p->l;
         p->l = q;
