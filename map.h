@@ -250,76 +250,8 @@ namespace ft {
 
         void erase(iterator pos)
         {
-            node<Key, Tp>* nodeToDelete = find(pos.currentNode->pair.first).currentNode;
-
-            if (nodeToDelete == _tree->getTailNode()) { return ; }
-
-            node<Key, Tp>* replacement = _tree->findReplacement(pos.currentNode);
-            if (replacement == _tree->getTailNode()) // если не нашли замену
-            {
-                // уничтожить элемент
-                // ссылку у родителя постовить на tail
-                if (nodeToDelete->parent != _tree->getTailNode())
-                {
-                    if (
-                        nodeToDelete->parent->l != _tree->getTailNode() &&
-                        _tree->isKeysEqual(nodeToDelete->parent->l->pair.first, nodeToDelete->pair.first)
-                       )
-                    {
-                        nodeToDelete->parent->l = _tree->getTailNode();
-                    }
-                    else
-                    {
-                        nodeToDelete->parent->r = _tree->getTailNode();
-                    }
-                }
-                if (nodeToDelete == _tree->getHeadNode()) {
-                    _tree->setHeadNode(_tree->getTailNode());
-                }
-                _tree->eraseNode(nodeToDelete);
-                _size--;
-                return ;
-            }
-
-            if (nodeToDelete->parent != _tree->getTailNode())
-            {
-                // if nodeToDelete is right (position) child
-                if (_tree->isKeysEqual(nodeToDelete->parent->r->pair.first, nodeToDelete->pair.first))
-                {
-                    nodeToDelete->parent->r = replacement;
-                    replacement->parent = nodeToDelete->parent;
-                }
-                else
-                {
-                    nodeToDelete->parent->l = replacement;
-                    replacement->parent = nodeToDelete->parent;
-                }
-                _tree->eraseNode(nodeToDelete);
-                _tree->calculateHeight(replacement);
-                _size--;
-            }
-            else
-            {
-                node<Key, Tp>* tmpHead = _tree->getHeadNode();
-                if (
-                        tmpHead->l != _tree->getTailNode() &&
-                        _tree->isKeysEqual(tmpHead->l->pair.first, nodeToDelete->pair.first)
-                   )
-                {
-                    replacement->r = tmpHead->r;
-                    tmpHead->r->parent = replacement;
-                }
-                else
-                {
-                    replacement->l = tmpHead->l;
-                    tmpHead->r->parent = replacement;
-                }
-                _tree->eraseNode(tmpHead);
-                _tree->setHeadNode(replacement);
-                _tree->calculateHeight(replacement);
-                _size--;
-            }
-
+            bool erased = _tree->erase(pos.currentNode);
+            if (erased) _size--;
         }
 
         /*

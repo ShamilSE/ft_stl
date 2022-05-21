@@ -41,7 +41,9 @@ public:
     node<T1, T2>* findReplacement(node<T1, T2>* nodeToDelete)
     {
         node<T1, T2>* currentNode = tail;
-        if (nodeToDelete->l != tail)
+        // decide where to search for replacement
+        bool toLeftSide = nodeToDelete->r->height > nodeToDelete->r->height ;
+        if (toLeftSide && nodeToDelete->l != tail)
         {
             currentNode = nodeToDelete->l;
             while (currentNode->r != tail)
@@ -88,6 +90,71 @@ public:
         node<T1, T2>* pNewNode = nodeAllocator.allocate(1);
         new(pNewNode) node<T1, T2>(value, tail);
         return pNewNode;
+    }
+
+    /*
+     *  в правом поддереве находим узел min с наименьшим ключом и заменяем удаляемый узел p на найденный узел min.
+     */
+    bool erase(node<T1, T2>* nodeToDelete)
+    {
+        if (nodeToDelete == tail) { return false; }
+
+        if (nodeToDelete->r == tail && nodeToDelete == tail) {
+
+            if (nodeToDelete->parent != tail)
+            {
+                if (
+                        nodeToDelete->parent->l != tail &&
+                        isKeysEqual(nodeToDelete->parent->l->pair.first, nodeToDelete->pair.first)
+                        )
+                {
+                    nodeToDelete->parent->l = tail;
+                }
+                else
+                {
+                    nodeToDelete->parent->r = tail;
+                }
+            }
+            if (nodeToDelete == head) {
+                head = tail;
+            }
+            eraseNode(nodeToDelete);
+            return true;
+        }
+
+        node<T1, T2>* replacement = findReplacement(nodeToDelete);
+        if (nodeToDelete->parent != tail)
+        {
+            // if nodeToDelete is right (position) child
+            if (isKeysEqual(nodeToDelete->parent->r->pair.first, nodeToDelete->pair.first))
+            {
+                nodeToDelete->parent->r = replacement;
+                replacement->parent = nodeToDelete->parent;
+            }
+            else
+            {
+                nodeToDelete->parent->l = replacement;
+                replacement->parent = nodeToDelete->parent;
+            }
+            eraseNode(nodeToDelete);
+            calculateHeight(replacement);
+            return true;
+        }
+        else // deleting head
+        {
+            node<T1, T2>* tmpHead = head;
+            head = replacement;
+            if (head != tmpHead->r) {
+                head->r = tmpHead->r;
+            }
+            if (head != tmpHead->l) {
+                head->l = tmpHead->l;
+            }
+            head->parent = tail;
+            eraseNode(tmpHead);
+            balance(head);
+            return true;
+        }
     }
 
     bool insert(node<T1, T2>* nodeToInsert) // TODO: make correct exit status
