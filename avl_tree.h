@@ -157,7 +157,7 @@ public:
         }
     }
 
-    bool insert(node<T1, T2>* nodeToInsert) // TODO: make correct exit status
+    bool insert(node<T1, T2>* nodeToInsert)
     {
         bool elInserted = false;
         if (head == tail) {

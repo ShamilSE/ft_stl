@@ -121,9 +121,13 @@ namespace ft {
 
         ft::pair<iterator, bool> insert(const value_type& value)
         {
+            iterator it = end();
+            if (find(value.first).currentNode != _tree->getTailNode()) { // if this key already inserted
+                return ft::make_pair(it, false);
+            }
+
             node<Key, Tp>* nodeToInsert = _tree->createNode(value);
             bool inserted = _tree->insert(nodeToInsert);
-            iterator it = end();
             if (inserted) {
                 _size++;
                 it = find(value.first);
