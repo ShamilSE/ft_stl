@@ -76,6 +76,16 @@ public:
         return currentNode;
     }
 
+    node<T1, T2>* getLastNode() {
+        node<T1, T2>* currentNode = head;
+        while (true) {
+            if (currentNode->r != tail) {
+                currentNode = currentNode->r;
+            }
+            else return currentNode;
+        }
+    }
+
     void calculateHeight(node<T1, T2>* node)
     {
         while (!node->isTail)
@@ -207,8 +217,8 @@ public:
         node<T1, T2>* currentNode = comparable;
         bool madeStepLeft = false;
 
-        if (currentNode == tail) {
-            return tail;
+        if (comparable->isTail) {
+            return getLastNode();
         }
 
         while (true)
