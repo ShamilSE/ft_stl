@@ -288,7 +288,7 @@ public:
 
     size_t height(node<T1, T2>* node)
     {
-        return node?node->height:0;
+        return node == tail ? node->height : 0;
     }
 
     int bfactor(node<T1, T2>* node)
