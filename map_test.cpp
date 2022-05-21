@@ -190,3 +190,30 @@ TEST(map, element_already_inserted)
     p = my_map->insert(ft::make_pair(1,1));
     EXPECT_EQ(p.second, false);
 }
+
+TEST(map, iterator)
+{
+    ft::map<int,int>* my_map = new ft::map<int,int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    my_map->insert(ft::make_pair(2,2));
+
+    ft::map<int,int>::iterator it = my_map->end();
+    EXPECT_EQ(it->first, 0);
+
+    it--;
+    EXPECT_EQ(it->first, 2);
+}
+
+TEST(map, reverse_iterator)
+{
+    ft::map<int,int>* my_map = new ft::map<int,int>();
+
+    my_map->insert(ft::make_pair(1,1));
+    my_map->insert(ft::make_pair(2,2));
+
+    ft::map<int,int>::reverse_iterator rit = my_map->rbegin();
+    EXPECT_EQ(rit->first, 2);
+    rit++;
+    EXPECT_EQ(rit->first, 1);
+}
