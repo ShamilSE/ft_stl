@@ -145,14 +145,14 @@ namespace ft {
             iterator it = iterator(_tree);
             while (true)
             {
-                if (
-                    (_tree->isKeysEqual(currentNode->pair.first, key))
-                    ||
-                    (currentNode == _tree->getTailNode())
-                   )
+                if (_tree->isKeysEqual(currentNode->pair.first, key))
                 {
                     it.setCurrentNode(currentNode);
                     return it;
+                }
+                else if (currentNode == _tree->getTailNode())
+                {
+                    return iterator(_tree, true);
                 }
                 else if (!_comparator(currentNode->pair.first, key))
                 {
@@ -161,10 +161,16 @@ namespace ft {
                         return it;
                     }
                     currentNode = _tree->prevEl(currentNode);
+                    if (_comparator(currentNode->pair.first, key)) {
+                        return iterator(_tree, true);
+                    }
                 }
                 else
                 {
                     currentNode = _tree->nextEl(currentNode);
+                    if (!_comparator(currentNode->pair.first, key)) {
+                        return iterator(_tree, true);
+                    }
                     if (currentNode == _tree->getTailNode()) return iterator(_tree, true);
                 }
             }
