@@ -106,6 +106,74 @@ namespace ft {
             bool isEnd;
         };
 
+        struct reverse_iterator {
+            avl_tree<Key, Tp, Compare, Allocator>* _tree;
+            node<Key, Tp>* currentNode;
+
+            explicit reverse_iterator(avl_tree<Key, Tp, Compare, Allocator>* tree, bool isEnd = false)
+                    : _tree(tree), isEnd(isEnd)
+            {
+                if (isEnd) {
+                    currentNode = _tree->getTailNode();
+                }
+                else {
+                    currentNode = _tree->getLastNode();
+                }
+            }
+
+            reverse_iterator operator++ (int) {
+                currentNode = _tree->prevEl(currentNode);
+                return *this;
+            }
+
+            reverse_iterator operator++ () {
+                currentNode = _tree->prevEl(currentNode);
+                return *this;
+            }
+
+            reverse_iterator operator-- (int) {
+                currentNode = _tree->nextEl(currentNode);
+                return *this;
+            }
+
+            reverse_iterator operator-- () {
+                currentNode = _tree->nextEl(currentNode);
+                return *this;
+            }
+
+            bool operator== (const reverse_iterator& other) {
+                return this->currentNode == other.currentNode;
+            }
+
+            bool operator!= (const reverse_iterator& other) {
+                return this->currentNode != other.currentNode;
+            }
+
+            bool operator< (const reverse_iterator& other) {
+                return this->currentNode > other.currentNode;
+            }
+
+            bool operator> (const reverse_iterator& other) {
+                return this->currentNode < other.currentNode;
+            }
+
+            bool operator<= (const reverse_iterator& other) {
+                return this->currentNode >= other.currentNode;
+            }
+
+            bool operator>= (const reverse_iterator& other) {
+                return this->currentNode <= other.currentNode;
+            }
+
+            value_type& operator* () { return currentNode->pair; }
+
+            value_type* operator->() { return &currentNode->pair; }
+
+            void setCurrentNode(node<Key, Tp>* node) { this->currentNode = node; }
+
+            bool isEnd;
+        };
+
         class value_compare
         {
         public:
@@ -348,8 +416,11 @@ namespace ft {
 
         //iterator
 
-        iterator begin() { return iterator(getTree()); }
+        iterator begin() { return iterator(_tree); }
         iterator end() { return iterator(_tree, true); };
+
+        reverse_iterator rbegin() {return reverse_iterator(_tree);};
+        reverse_iterator rend() {return reverse_iterator(_tree, true);};
 
     };// class map
 
