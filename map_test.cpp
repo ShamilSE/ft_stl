@@ -6,17 +6,18 @@
 
 TEST(map, iterator_test) {
     ft::map<int, int> a;
-    a.insert(ft::make_pair(1, 5));
-    a.insert(ft::make_pair(-1, -5));
+    a.insert(ft::make_pair(10, 5));
     a.insert(ft::make_pair(5, 4));
-    a.insert(ft::make_pair(3, 9));
-    a.insert(ft::make_pair(4, 16));
+    a.insert(ft::make_pair(13, 9));
+    a.insert(ft::make_pair(14, 16));
+    a.insert(ft::make_pair(12, 16));
 
     std::map<int, int> origin;
-    origin.insert(std::make_pair(1, 5));
+    origin.insert(std::make_pair(10, 5));
     origin.insert(std::make_pair(5, 4));
-    origin.insert(std::make_pair(3, 9));
-    origin.insert(std::make_pair(4, 16));
+    origin.insert(std::make_pair(13, 9));
+    origin.insert(std::make_pair(14, 16));
+    origin.insert(std::make_pair(12, 16));
 
     ft::map<int,int>::iterator ftIt = a.begin();
     std::map<int,int>::iterator stdIt = origin.begin();
@@ -30,12 +31,12 @@ TEST(map, iterator_test) {
 TEST(map, iterator_test_2) {
     ft::map<int, int> my_map;
 
-    my_map.insert(ft::make_pair(1, 5));
-    my_map.insert(ft::make_pair(2, 6));
-    my_map.insert(ft::make_pair(3, 7));
-    my_map.insert(ft::make_pair(4, 8));
-    my_map.insert(ft::make_pair(5, 9));
-    my_map.insert(ft::make_pair(-10, 1000));
+    my_map.insert(ft::make_pair(10, 5));
+    my_map.insert(ft::make_pair(12, 6));
+    my_map.insert(ft::make_pair(13, 7));
+    my_map.insert(ft::make_pair(14, 8));
+    my_map.insert(ft::make_pair(15, 9));
+    my_map.insert(ft::make_pair(5, 1000));
 
     EXPECT_EQ(my_map.end()->second, 0);
 }
@@ -175,20 +176,17 @@ TEST(map, compare_method) {
     my_map->insert(ft::make_pair(1,1));
     my_map->insert(ft::make_pair(5,5));
     std::less<int> comparator = my_map->key_comp();
-    std::cout << comparator(1,12) << std::endl;
-    std::cout << comparator(12,1) << std::endl;
 
     EXPECT_EQ(comparator(1,12), 1);
     EXPECT_EQ(comparator(12,1), 0);
 }
 
-TEST(map, fixheight)
+TEST(map, element_already_inserted)
 {
-    ft::map<int,int>* my_map = new ft::map<int,int>();
+    ft::map<int,int>* my_map = new ft::map<int, int>();
 
-    my_map->insert(ft::make_pair(1,1));
-    my_map->insert(ft::make_pair(2,2));
-    my_map->insert(ft::make_pair(3,3));
-
-
+    ft::pair<ft::map<int,int>::iterator, bool> p = my_map->insert(ft::make_pair(1,1));
+    EXPECT_EQ(p.second, true);
+    p = my_map->insert(ft::make_pair(1,1));
+    EXPECT_EQ(p.second, false);
 }
