@@ -161,6 +161,11 @@ namespace ft {
                         return it;
                     }
                     currentNode = _tree->prevEl(currentNode);
+                    if (_tree->isKeysEqual(currentNode->pair.first, key))
+                    {
+                        it.setCurrentNode(currentNode);
+                        return it;
+                    }
                     if (_comparator(currentNode->pair.first, key)) {
                         return iterator(_tree, true);
                     }
@@ -168,9 +173,13 @@ namespace ft {
                 else
                 {
                     currentNode = _tree->nextEl(currentNode);
-                    if (!_comparator(currentNode->pair.first, key)) {
-                        return iterator(_tree, true);
+                    if (_tree->isKeysEqual(currentNode->pair.first, key)) {
+                        it.setCurrentNode(currentNode);
+                        return it;
                     }
+
+                    if (!_comparator(currentNode->pair.first, key)) return iterator(_tree, true);
+
                     if (currentNode == _tree->getTailNode()) return iterator(_tree, true);
                 }
             }
